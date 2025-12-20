@@ -56,10 +56,39 @@ namespace MLTD.GenericSystem
         private void Start()
         {
             DisableAllInput(); // Start disabled (During Splash Screen)
-            //InitPlayerInput();
-            currentActionMap = playerInput?.currentActionMap?.name;
+            //currentActionMap = playerInput?.currentActionMap?.name;
 
             //movementJoystick = FindAnyObjectByType<FixedJoystick>();
+            GlobalGameManager.Instance.OnGameStateChanged += OnInputMapChange;
+            OnInputMapChange(GlobalGameManager.Instance.CurrentGameState);
+        }
+
+        void OnInputMapChange(GameStates state)
+        {
+            switch (state)
+            {
+                case GameStates.Splash:
+                    DisableAllInput();                    
+                    currentActionMap = "Input Disabled";
+                    playerInput.DeactivateInput(); // prevents PlayerInput callbacks too
+                    break;
+
+                case GameStates.Title:
+                    SwitchActionMap("UI");
+                    currentActionMap = "UI";
+                    playerInput.ActivateInput();
+                    break;
+                
+                case GameStates.MainGameplay:
+                    SwitchActionMap("Player");
+                    currentActionMap = "Player";   
+                    playerInput.ActivateInput(); 
+                    break;
+                
+                case GameStates.Cutscene:
+                    
+                    break;
+            }
         }
         
     #region Init
@@ -149,9 +178,6 @@ namespace MLTD.GenericSystem
             {
                 action?.Disable();
             }
-
-            currentActionMap = "Input Disabled";
-            playerInput.DeactivateInput(); // prevents PlayerInput callbacks too
         }
 
         public void EnableAllInputForCurrentActionMap()
