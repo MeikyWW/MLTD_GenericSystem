@@ -1,0 +1,10 @@
+{
+  "name": "com.mltd.genericsystem",
+  "version": "0.1.0",
+  "displayName": "MLTD Generic Game Systems",
+  "description": "Reusable generic systems for Unity games",
+  "unity": "2021.3",
+  "author": {
+    "name": "MLTD"
+  }
+}
