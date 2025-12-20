@@ -77,19 +77,19 @@ namespace MLTD.GenericSystem
             Debug.Log("Save Data is loaded");
         }
 
-        // IEnumerator InitAddressables(float start, float end)
-        // {
-        //     var handle = Addressables.InitializeAsync();
+        IEnumerator InitAddressables(float start, float end)
+        {
+            var handle = Addressables.InitializeAsync();
 
-        //     while (!handle.IsDone)
-        //     {
-        //         float p = Mathf.Lerp(start, end, handle.PercentComplete);
-        //         SetProgress(p);
-        //         yield return null;
-        //     }
+            while (!handle.IsDone)
+            {
+                float p = Mathf.Lerp(start, end, handle.PercentComplete);
+                SetProgress(p);
+                yield return null;
+            }
 
-        //     SetProgress(end);
-        // }
+            SetProgress(end);
+        }
 
         public void SetProgress(float value)
         {

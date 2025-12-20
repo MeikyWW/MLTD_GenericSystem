@@ -237,7 +237,7 @@ namespace MLTD.GenericSystem
 
             if (idm.CurrentDeviceInput != DeviceInputType.Gamepad) //only do when the Input is a gamePad
             return;
-
+            
             //selected first object must not play a sound
             uiObject.GetComponent<UI_InputEffects>().playAudioWhenHighlight = false;
             uiObject.GetComponent<UI_InputEffects>().playAudioWhenSelected = false;

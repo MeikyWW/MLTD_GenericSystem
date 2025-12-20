@@ -6,5 +6,13 @@
   "unity": "2021.3",
   "author": {
     "name": "MLTD"
-  }
+  },
+  "samples":
+  [
+    {
+      "displayName": "_GenericAssets",
+      "description": "Example prefabs and scene for MLTD Generic System",
+      "path": "Samples~/_GenericAssets"
+    }
+  ]
 }

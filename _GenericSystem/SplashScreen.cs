@@ -6,14 +6,23 @@ namespace MLTD.GenericSystem
 {
     public class SplashScreen : MonoBehaviour
     {
+        [SerializeField] bool isSamples = false;
+        [SerializeField] string TitleScreenScene = "TitleScreen";
+        [SerializeField] string TitleScreenSampleScene = "TitleScreen (Samples)";
         [SerializeField] UnityEvent OnSplashScreenCompleted;
-
-        // Start is called once before the first execution of 
-        // Update after the MonoBehaviour is created
 
         public void SplashScreenCompleted()
         {
-            SceneManager.LoadSceneAsync("TitleScreen");
+            OnSplashScreenCompleted.Invoke();
+
+            string targetScene;
+
+            if(!isSamples)
+                targetScene = TitleScreenScene;
+            else
+                targetScene = TitleScreenSampleScene;
+
+            SceneManager.LoadScene(targetScene);
         }
 
     }

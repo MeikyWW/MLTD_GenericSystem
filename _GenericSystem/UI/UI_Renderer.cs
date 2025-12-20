@@ -1,17 +1,17 @@
 using UnityEngine;
 using UnityEngine.Events;
+//using DG.Tweening;
 using System;
 
 public class UI_Renderer : MonoBehaviour
 {
-    [Range(0f, 1f)]
     public float opacity = 1f;
     private float currentOpacity = 0f;
     
     static float transitionDuration = 0.2f;
 
 
-    //private Tween activeTween;
+    // private Tween activeTween;
 
     public CanvasRenderer[] canvasRenderers;
 
@@ -21,63 +21,64 @@ public class UI_Renderer : MonoBehaviour
     
     void Awake()
     {
-        LoadAllUiRenderersFromChild();
+        // LoadAllUiRenderersFromChild();
     }
 
     void LoadAllUiRenderersFromChild()
     {
         canvasRenderers = GetComponentsInChildren<CanvasRenderer>(true);
     }
+
     public void SetOpacity()
     {
-        SetOpacity(opacity);
+        // SetOpacity(opacity);
     }
 
     public void SetOpacity(float _opacity)
     {
-       // SetOpacity(_opacity, transitionDuration, null);
+        // SetOpacity(_opacity, transitionDuration, null);
     }
 
     public void SetOpacity(float _opacity, float _duration)
     {
-        //SetOpacity(_opacity, _duration, null);
+        // SetOpacity(_opacity, _duration, null);
     }
 
-    // public void SetOpacity(float _opacity, float _duration, Action onComplete = null)
-    // {
-    //     if (canvasRenderers == null || canvasRenderers.Length == 0) return;
+    public void SetOpacity(float _opacity, float _duration, Action onComplete = null)
+    {
+        // if (canvasRenderers == null || canvasRenderers.Length == 0) return;
 
-    //     activeTween?.Kill(); // Cancel any existing tween
+        // activeTween?.Kill(); // Cancel any existing tween
 
-    //     Sequence seq = DOTween.Sequence();
+        // Sequence seq = DOTween.Sequence();
 
-    //     foreach (var renderer in canvasRenderers)
-    //     {
-    //         float startAlpha = renderer.GetAlpha();
-    //         seq.Join(DOTween.To(() => startAlpha, x =>
-    //         {
-    //             startAlpha = x;
-    //             renderer.SetAlpha(x);
-    //         }, _opacity, _duration));
-    //     }
+        // foreach (var renderer in canvasRenderers)
+        // {
+        //     float startAlpha = renderer.GetAlpha();
+        //     seq.Join(DOTween.To(() => startAlpha, x =>
+        //     {
+        //         startAlpha = x;
+        //         renderer.SetAlpha(x);
+        //     }, _opacity, _duration));
+        // }
 
-    //     activeTween = seq;
+        // activeTween = seq;
 
-    //     seq.OnComplete(() =>
-    //     {
-    //         currentOpacity = _opacity;
-    //         onFadeComplete?.Invoke();
-    //         onComplete?.Invoke();
-    //     });
-    // }
+        // seq.OnComplete(() =>
+        // {
+        //     currentOpacity = _opacity;
+        //     onFadeComplete?.Invoke();
+        //     onComplete?.Invoke();
+        // });
+    }
 
-    // public void SetOpacityNoTransition(float _opacity)
-    // {
-    //     activeTween?.Kill();
-    //     foreach (var renderer in canvasRenderers)
-    //     {
-    //         renderer.SetAlpha(_opacity);
-    //     }
-    //     currentOpacity = _opacity;
-    // }
+    public void SetOpacityNoTransition(float _opacity)
+    {
+        // activeTween?.Kill();
+        // foreach (var renderer in canvasRenderers)
+        // {
+        //     renderer.SetAlpha(_opacity);
+        // }
+        // currentOpacity = _opacity;
+    }
 }

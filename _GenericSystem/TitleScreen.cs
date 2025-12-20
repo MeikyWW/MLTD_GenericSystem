@@ -46,7 +46,6 @@ namespace MLTD.GenericSystem
 
         public void DeleteSaveData()
         {
-            
         }
         
     }

@@ -63,7 +63,7 @@ namespace MLTD.GenericSystem
             aum = AudioManager.Instance;
             lcm = LocalizationManager.Instance;
             //dspm = DisplayManager.Instance;
-            gl_uim = GlobalUIManager.Instance;
+            //gl_uim = GlobalUIManager.Instance;
             
             ValidateManagers();
 
@@ -82,7 +82,7 @@ namespace MLTD.GenericSystem
             if (!aum) Debug.LogError("AudioManager missing");
             if (!lcm) Debug.LogError("LocalizationManager missing");
             //if (!dspm) Debug.LogError("DisplayManager missing");
-            if (!gl_uim) Debug.LogError("GlobalUIManager missing");
+            //if (!gl_uim) Debug.LogError("GlobalUIManager missing");
 
             SystemsReady =
                 ssm  
@@ -91,7 +91,7 @@ namespace MLTD.GenericSystem
                 && aum  
                 && lcm  
                 //&& dspm  
-                && gl_uim
+                //&& gl_uim
                 ;
         }
 

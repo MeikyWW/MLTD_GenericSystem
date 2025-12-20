@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 namespace MLTD.GenericSystem
 {
-
     public class UI_PopUpBase : MonoBehaviour
     {
         [SerializeField] public UI_MenuManager menuManager;
