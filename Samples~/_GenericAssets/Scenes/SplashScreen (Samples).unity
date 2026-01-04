@@ -527,26 +527,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 162926555322140506, guid: 9e4147c9e99f7c14087a2dacb0aa3503,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2424033240697861452, guid: 9e4147c9e99f7c14087a2dacb0aa3503,
-        type: 3}
-      propertyPath: isSamples
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2424033240697861452, guid: 9e4147c9e99f7c14087a2dacb0aa3503,
-        type: 3}
-      propertyPath: OnSplashScreenCompleted.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2424033240697861452, guid: 9e4147c9e99f7c14087a2dacb0aa3503,
-        type: 3}
-      propertyPath: OnSplashScreenCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4007010752037667277, guid: 9e4147c9e99f7c14087a2dacb0aa3503,
         type: 3}
       propertyPath: m_Pivot.x
@@ -651,11 +631,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SplashScreen (Samples)
-      objectReference: {fileID: 0}
-    - target: {fileID: 9115248395670590485, guid: 9e4147c9e99f7c14087a2dacb0aa3503,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1119,7 +1094,6 @@ GameObject:
   - component: {fileID: 7214723878000771415}
   - component: {fileID: 4505145581408370177}
   - component: {fileID: 913094032705262731}
-  - component: {fileID: 8766334547399609136}
   m_Layer: 5
   m_Name: UI_LoadingScreen
   m_TagString: Untagged
@@ -1127,26 +1101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8766334547399609136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8506594613364793375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47725162f8f4a904f8674d1af58fc561, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  opacity: 0
-  canvasRenderers:
-  - {fileID: 4505145581408370177}
-  - {fileID: 7525583243454561888}
-  - {fileID: 3556489134742174555}
-  onFadeComplete:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -461,7 +461,6 @@ MonoBehaviour:
   currentActionMap: 
   playerInput: {fileID: 3853693645017849409}
   currentSelectedGO: {fileID: 0}
-  movementJoystick: {fileID: 0}
   holdRepeatDelay: 0.5
   holdRepeatRate: 0.1
 --- !u!1 &6473580023564559750
@@ -814,6 +813,9 @@ MonoBehaviour:
   aum: {fileID: 0}
   lcm: {fileID: 0}
   gl_uim: {fileID: 0}
+  newGameEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7873055190432052914
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,7 +1198,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fakeTimer: 2
   loadingBar: {fileID: 9091198278279851912}
-  renderer: {fileID: 884305910285687284}
 --- !u!1001 &12023201344787826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1374,22 +1375,11 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents:
     - {fileID: 2947052121104526874, guid: 18a5edefe994785429c1e4c215370794, type: 3}
+    - {fileID: 895961805856394374, guid: 18a5edefe994785429c1e4c215370794, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18a5edefe994785429c1e4c215370794, type: 3}
---- !u!114 &884305910285687284 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 895961805856394374, guid: 18a5edefe994785429c1e4c215370794,
-    type: 3}
-  m_PrefabInstance: {fileID: 12023201344787826}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47725162f8f4a904f8674d1af58fc561, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1293149357182653331 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1285926628473276129, guid: 18a5edefe994785429c1e4c215370794,

@@ -297,7 +297,6 @@ GameObject:
   - component: {fileID: 5906170377015148513}
   - component: {fileID: 823113677638713527}
   - component: {fileID: 4126073107968617021}
-  - component: {fileID: 5494797664678770054}
   m_Layer: 5
   m_Name: UI_SplashScreen
   m_TagString: Untagged
@@ -365,27 +364,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5494797664678770054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4892115587313163945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47725162f8f4a904f8674d1af58fc561, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  opacity: 1
-  canvasRenderers:
-  - {fileID: 823113677638713527}
-  - {fileID: 4804642325083282759}
-  - {fileID: 6082619770912394193}
-  - {fileID: 4241377995965980661}
-  onFadeComplete:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &9115248395670590485
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,19 +485,7 @@ MonoBehaviour:
   TitleScreenSampleScene: TitleScreen (Samples)
   OnSplashScreenCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlobalGameManager, Assembly-CSharp
-        m_MethodName: LoadTitleScreen
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!95 &3617335333759354544
 Animator:
   serializedVersion: 7
