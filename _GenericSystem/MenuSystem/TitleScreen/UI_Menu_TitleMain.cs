@@ -9,7 +9,9 @@ namespace MLTD.GenericSystem
     {
         [Header("Title Main Menu Button List")]
         [SerializeField] List <ButtonMenuEventPair> buttonMenuList;
-
+        
+        [Header("Dependencies")]
+        [SerializeField] UI_PopUp_TitleScreen titleScreenPopup;
 
         protected override void OnEnable()
         {
@@ -44,7 +46,7 @@ namespace MLTD.GenericSystem
 
         public void _NewGame()
         {
-            RequestNewGame();
+            titleScreenPopup.PopUp_NewGameConfirmation();
             //Debug.Log("NewGame");
         }
 
@@ -60,23 +62,10 @@ namespace MLTD.GenericSystem
 
         public void _QuitGame()
         {
-            RequestQuitGame();
+            titleScreenPopup.PopUp_QuitGameConfirmation();
             //Debug.Log("Quit Game");
         }
 
-        [Header("Dependencies")]
-        [SerializeField] UI_PopUp_TitleScreen titleScreenPopup;
-
-
-        public void RequestNewGame()
-        {
-            titleScreenPopup.PopUp_NewGameConfirmation();
-        }
-
-        public void RequestQuitGame()
-        {
-            titleScreenPopup.PopUp_QuitGameConfirmation();
-        }
     }
 
     [System.Serializable]

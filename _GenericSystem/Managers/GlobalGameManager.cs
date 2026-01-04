@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.Events;
 
 namespace MLTD.GenericSystem
 {
@@ -117,7 +118,7 @@ namespace MLTD.GenericSystem
                 { GameStates.Splash,    OnEnter_SplashState },
                 { GameStates.Title,     OnEnter_TitleState },
                 { GameStates.MainGameplay,  OnEnter_GameplayState },
-                //{ GameStates.Cutscene,  CutsceneState() },
+                { GameStates.Cutscene,  OnEnter_CutsceneState },
                 //{ GameStates.MainMenu,  MainMenuState() },
                 //{ GameStates.MiniGame,  GameoverState() },
             };
@@ -145,6 +146,10 @@ namespace MLTD.GenericSystem
 
                 case SceneType.Gameplay:
                     SetGameState(GameStates.MainGameplay);
+                    break;
+                
+                case SceneType.Cutscene:
+                    SetGameState(GameStates.Cutscene);
                     break;
 
                 default:
@@ -190,12 +195,15 @@ namespace MLTD.GenericSystem
         public void OnEnter_GameplayState()
         {
             Debug.Log("Entering Gameplay State");
+        }public void OnEnter_CutsceneState()
+        {
+            Debug.Log("Entering Cutscene State");
         }
     #endregion
 
     #region Scene Loader
 
-        private IEnumerator LoadSceneRoutine(string sceneName)
+        private IEnumerator LoadSceneRoutine(string sceneName, bool useLoadingScreen)
         {
             if (string.IsNullOrEmpty(previousScene))
             {
@@ -210,7 +218,8 @@ namespace MLTD.GenericSystem
             isLoadingScenes = true;
 
             //call Loading Screen 
-            GlobalUIManager.Instance.CallLoadingScreen();
+            if (useLoadingScreen)
+                GlobalUIManager.Instance.CallLoadingScreen();
 
             //wait for loading scene transition first
             yield return new WaitForSeconds(1f);
@@ -229,14 +238,18 @@ namespace MLTD.GenericSystem
 
         public void LoadScene(string sceneName)
         {
-            StartCoroutine(LoadSceneRoutine(sceneName));
+            StartCoroutine(LoadSceneRoutine(sceneName, false));
+        }
+        public void LoadScene(string sceneName, bool useLoadingScreen)
+        {
+            StartCoroutine(LoadSceneRoutine(sceneName, useLoadingScreen));
         }
 
-        public void ReloadCurrentScene()
+        public void ReloadCurrentScene(bool useLoadingScreen)
         {
             Scene currentScene = SceneManager.GetActiveScene();
 
-            StartCoroutine(LoadSceneRoutine(currentScene.name));
+            StartCoroutine(LoadSceneRoutine(currentScene.name, useLoadingScreen));
         }
 
         public void LoadTitleScreen()
@@ -259,9 +272,11 @@ namespace MLTD.GenericSystem
     #endif
         }
 
+        [SerializeField] UnityEvent newGameEvent;
+
         public void NewGame()
         {
-            LoadScene("PlaytestRoom");
+            newGameEvent.Invoke();
         }
 
     }
