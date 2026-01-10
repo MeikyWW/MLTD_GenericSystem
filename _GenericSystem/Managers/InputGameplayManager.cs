@@ -17,8 +17,8 @@ namespace MLTD.GenericSystem
         public InputAction interactAction;
         public InputAction pauseAction;
 
-        //Dialogue
-        [HideInInspector] public InputAction nextDialogueAction;
+        //Sequence
+        [HideInInspector] public InputAction ConfirmAction;
 
         //Menu
         [HideInInspector] public InputAction pauseMenuAction;
@@ -57,9 +57,7 @@ namespace MLTD.GenericSystem
         private void Start()
         {
             DisableAllInput(); // Start disabled (During Splash Screen)
-            //currentActionMap = playerInput?.currentActionMap?.name;
 
-            //movementJoystick = FindAnyObjectByType<FixedJoystick>();
             GlobalGameManager.Instance.OnGameStateChanged += OnInputMapChange;
             OnInputMapChange(GlobalGameManager.Instance.CurrentGameState);
         }
@@ -91,7 +89,6 @@ namespace MLTD.GenericSystem
         public void DisablePlayerInput()
         {
             playerInput.DeactivateInput();
-            InputActionMap actionMapMenu = playerInput.actions.FindActionMap(ActionMapType.Disabled.ToString());
         }
 
         public void InitPlayerInput()
@@ -130,11 +127,11 @@ namespace MLTD.GenericSystem
             TabRightAction = actionMapMenu.FindAction("TabRight");
         }
 
-        private void InitDialogueActions()
+        private void InitSequenceActions()
         {
             playerInput.ActivateInput();
-            InputActionMap actionMapDialogue = playerInput.actions.FindActionMap(ActionMapType.Dialogue.ToString());
-            nextDialogueAction = actionMapDialogue.FindAction("NextDialogue");
+            InputActionMap actionMapDialogue = playerInput.actions.FindActionMap(ActionMapType.Sequence.ToString());
+            ConfirmAction = actionMapDialogue.FindAction("Confirm");
         }
 
     #endregion
@@ -178,7 +175,7 @@ namespace MLTD.GenericSystem
             yield return pauseAction;
 
             //Dialogue
-            yield return nextDialogueAction;
+            yield return ConfirmAction;
 
             //Menu
             yield return pauseMenuAction;
@@ -212,8 +209,8 @@ namespace MLTD.GenericSystem
                 InitPlayerInput();
             else if (currentActionMap == ActionMapType.Menu.ToString())
                 InitMenuInput();
-            else if (currentActionMap == ActionMapType.Dialogue.ToString())
-                InitDialogueActions();
+            else if (currentActionMap == ActionMapType.Sequence.ToString())
+                InitSequenceActions();
             else if (currentActionMap == ActionMapType.UI.ToString())
                 InitUIInput();
         }
@@ -254,15 +251,15 @@ namespace MLTD.GenericSystem
         {
             SwitchActionMap(ActionMapType.Menu.ToString());
         }
-        [ContextMenu("SwitchActionMap_UI")]
+        [ContextMenu("SwitchActionMap")]
         public void SwitchActionMap_UI()
         {
-            SwitchActionMap(ActionMapType.Dialogue.ToString());
-        }
-        [ContextMenu("SwitchActionMap_Dialogue")]
-        public void SwitchActionMap_Dialogue()
-        {
             SwitchActionMap(ActionMapType.UI.ToString());
+        }
+        [ContextMenu("SwitchActionMap_Sequence")]
+        public void SwitchActionMap_Sequence()
+        {
+            SwitchActionMap(ActionMapType.Sequence.ToString());
         }
     }
 }
@@ -272,6 +269,6 @@ public enum ActionMapType
     Disabled,
     Player,
     Menu,
-    Dialogue,
+    Sequence,
     UI
 }
