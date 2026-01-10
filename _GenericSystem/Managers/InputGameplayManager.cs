@@ -38,6 +38,7 @@ namespace MLTD.GenericSystem
 #endregion
 
         public string currentActionMap;
+        public string previousActionMap;
         [SerializeField] PlayerInput playerInput;
 
         public GameObject currentSelectedGO;
@@ -68,20 +69,18 @@ namespace MLTD.GenericSystem
             switch (state)
             {
                 case GameStates.Splash:
-                    DisableAllInput();                    
-                    currentActionMap = "Input Disabled";
+                    DisableAllInput();                
+                    SwitchActionMap(ActionMapType.Disabled.ToString());
                     playerInput.DeactivateInput(); // prevents PlayerInput callbacks too
                     break;
 
                 case GameStates.Title:
-                    SwitchActionMap("UI");
-                    currentActionMap = "UI";
+                    SwitchActionMap(ActionMapType.UI.ToString());
                     playerInput.ActivateInput();
                     break;
                 
                 case GameStates.MainGameplay:
-                    SwitchActionMap("Player");
-                    currentActionMap = "Player";   
+                    SwitchActionMap(ActionMapType.Player.ToString()); 
                     playerInput.ActivateInput(); 
                     break;
                 
@@ -137,8 +136,27 @@ namespace MLTD.GenericSystem
     #region Handler
         public void SwitchActionMap(string actionMap)
         {
+            if (currentActionMap == actionMap) return;
+
+            previousActionMap = currentActionMap;
+            currentActionMap = actionMap;
+
             DisableAllInput();
             playerInput.SwitchCurrentActionMap(actionMap);
+            EnableAllInputForCurrentActionMap();
+        }
+
+        public void BacktoPreviousActionMap()
+        {   
+            if (string.IsNullOrEmpty(previousActionMap)) return;
+
+            string temp = currentActionMap;
+
+            currentActionMap = previousActionMap;
+            previousActionMap = temp;
+
+            DisableAllInput();
+            playerInput.SwitchCurrentActionMap(currentActionMap);
             EnableAllInputForCurrentActionMap();
         }
 
@@ -184,18 +202,14 @@ namespace MLTD.GenericSystem
         {
             playerInput.ActivateInput(); // re-enable PlayerInput internal system
 
-            string currentMap = playerInput.currentActionMap.name;
-
-            if (currentMap == "Player")
+            if (currentActionMap == ActionMapType.Player.ToString())
                 InitPlayerInput();
-            else if (currentMap == "Menu")
+            else if (currentActionMap == ActionMapType.Menu.ToString())
                 InitMenuInput();
-            else if (currentMap == "Dialogue")
+            else if (currentActionMap == ActionMapType.Dialogue.ToString())
                 InitDialogueActions();
-            else if (currentMap == "UI")
+            else if (currentActionMap == ActionMapType.UI.ToString())
                 InitUIInput();
-
-            currentActionMap = currentMap;
         }
 
     #endregion
@@ -224,5 +238,34 @@ namespace MLTD.GenericSystem
                 timer = 0f; // Reset on release
             }
         }
+        [ContextMenu("SwitchActionMap_Player")]
+        public void SwitchActionMap_Player()
+        {
+            SwitchActionMap(ActionMapType.Player.ToString());
+        }
+        [ContextMenu("SwitchActionMap_Menu")]
+        public void SwitchActionMap_Menu()
+        {
+            SwitchActionMap(ActionMapType.Menu.ToString());
+        }
+        [ContextMenu("SwitchActionMap_UI")]
+        public void SwitchActionMap_UI()
+        {
+            SwitchActionMap(ActionMapType.Dialogue.ToString());
+        }
+        [ContextMenu("SwitchActionMap_Dialogue")]
+        public void SwitchActionMap_Dialogue()
+        {
+            SwitchActionMap(ActionMapType.UI.ToString());
+        }
     }
+}
+
+public enum ActionMapType
+{
+    Disabled,
+    Player,
+    Menu,
+    Dialogue,
+    UI
 }
