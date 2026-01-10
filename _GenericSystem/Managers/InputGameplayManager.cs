@@ -130,8 +130,8 @@ namespace MLTD.GenericSystem
         private void InitSequenceActions()
         {
             playerInput.ActivateInput();
-            InputActionMap actionMapDialogue = playerInput.actions.FindActionMap(ActionMapType.Sequence.ToString());
-            ConfirmAction = actionMapDialogue.FindAction("Confirm");
+            InputActionMap actionMapSequence = playerInput.actions.FindActionMap(ActionMapType.Sequence.ToString());
+            ConfirmAction = actionMapSequence.FindAction("Confirm");
         }
 
     #endregion
@@ -174,7 +174,7 @@ namespace MLTD.GenericSystem
             yield return interactAction;
             yield return pauseAction;
 
-            //Dialogue
+            //Sequence
             yield return ConfirmAction;
 
             //Menu
