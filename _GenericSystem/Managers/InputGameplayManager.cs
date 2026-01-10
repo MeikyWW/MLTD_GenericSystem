@@ -70,31 +70,34 @@ namespace MLTD.GenericSystem
             {
                 case GameStates.Splash:        
                     SwitchActionMap(ActionMapType.Disabled.ToString());
-                    playerInput.DeactivateInput(); // prevents PlayerInput callbacks too
                     break;
 
                 case GameStates.Title:
                     SwitchActionMap(ActionMapType.UI.ToString());
-                    playerInput.ActivateInput();
                     break;
                 
                 case GameStates.MainGameplay:
                     SwitchActionMap(ActionMapType.Player.ToString()); 
-                    playerInput.ActivateInput(); 
                     break;
                 
                 case GameStates.Cutscene:
-                    SwitchActionMap(ActionMapType.Disabled.ToString()); 
-                    playerInput.DeactivateInput();
+                    SwitchActionMap(ActionMapType.Disabled.ToString());
                     break;
             }
         }
         
     #region Init
 
+        public void DisablePlayerInput()
+        {
+            playerInput.DeactivateInput();
+            InputActionMap actionMapMenu = playerInput.actions.FindActionMap(ActionMapType.Disabled.ToString());
+        }
+
         public void InitPlayerInput()
         {
-            InputActionMap actionMapPlayer = playerInput.actions.FindActionMap("Player");
+            playerInput.ActivateInput();
+            InputActionMap actionMapPlayer = playerInput.actions.FindActionMap(ActionMapType.Player.ToString());
             moveAction = actionMapPlayer.FindAction("Move");
             jumpAction = actionMapPlayer.FindAction("Jump");
             dashAction = actionMapPlayer.FindAction("Dash");
@@ -106,7 +109,8 @@ namespace MLTD.GenericSystem
 
         public void InitMenuInput()
         {
-            InputActionMap actionMapMenu = playerInput.actions.FindActionMap("Menu");
+            playerInput.ActivateInput();
+            InputActionMap actionMapMenu = playerInput.actions.FindActionMap(ActionMapType.Menu.ToString());
             pauseAction = actionMapMenu.FindAction("Pause");
             nextMenuAction = actionMapMenu.FindAction("NextTab");
             previousMenuAction = actionMapMenu.FindAction("PreviousTab");
@@ -120,14 +124,16 @@ namespace MLTD.GenericSystem
 
         public void InitUIInput()
         {
-            InputActionMap actionMapMenu = playerInput.actions.FindActionMap("UI");
+            playerInput.ActivateInput();
+            InputActionMap actionMapMenu = playerInput.actions.FindActionMap(ActionMapType.UI.ToString());
             TabLeftAction = actionMapMenu.FindAction("TabLeft");
             TabRightAction = actionMapMenu.FindAction("TabRight");
         }
 
         private void InitDialogueActions()
         {
-            InputActionMap actionMapDialogue = playerInput.actions.FindActionMap("Dialogue");
+            playerInput.ActivateInput();
+            InputActionMap actionMapDialogue = playerInput.actions.FindActionMap(ActionMapType.Dialogue.ToString());
             nextDialogueAction = actionMapDialogue.FindAction("NextDialogue");
         }
 
@@ -143,7 +149,7 @@ namespace MLTD.GenericSystem
 
             DisableAllInput();
             playerInput.SwitchCurrentActionMap(actionMap);
-            EnableAllInputForCurrentActionMap();
+            InitSelectedActionMap();
         }
 
         public void BacktoPreviousActionMap()
@@ -157,7 +163,7 @@ namespace MLTD.GenericSystem
 
             DisableAllInput();
             playerInput.SwitchCurrentActionMap(currentActionMap);
-            EnableAllInputForCurrentActionMap();
+            InitSelectedActionMap();
         }
 
         private IEnumerable<InputAction> GetAllActions()
@@ -198,11 +204,11 @@ namespace MLTD.GenericSystem
             }
         }
 
-        public void EnableAllInputForCurrentActionMap()
+        public void InitSelectedActionMap()
         {
-            playerInput.ActivateInput(); // re-enable PlayerInput internal system
-
-            if (currentActionMap == ActionMapType.Player.ToString())
+            if (currentActionMap == ActionMapType.Disabled.ToString())
+                InitMenuInput();
+            else if (currentActionMap == ActionMapType.Player.ToString())
                 InitPlayerInput();
             else if (currentActionMap == ActionMapType.Menu.ToString())
                 InitMenuInput();
