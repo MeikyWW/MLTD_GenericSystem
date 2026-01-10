@@ -68,8 +68,7 @@ namespace MLTD.GenericSystem
         {
             switch (state)
             {
-                case GameStates.Splash:
-                    DisableAllInput();                
+                case GameStates.Splash:        
                     SwitchActionMap(ActionMapType.Disabled.ToString());
                     playerInput.DeactivateInput(); // prevents PlayerInput callbacks too
                     break;
@@ -85,7 +84,8 @@ namespace MLTD.GenericSystem
                     break;
                 
                 case GameStates.Cutscene:
-                    
+                    SwitchActionMap(ActionMapType.Disabled.ToString()); 
+                    playerInput.DeactivateInput();
                     break;
             }
         }
