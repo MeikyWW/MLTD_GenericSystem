@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using MLTD.GenericSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,8 @@ public class GlobalLoadingScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        /*  */StartCoroutine(WaitLoadingScreens());
+        if(GlobalGameManager.Instance.bootCompleted)
+            StartCoroutine(WaitLoadingScreens());
     }
 
     private void OnDisable()

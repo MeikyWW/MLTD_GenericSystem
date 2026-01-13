@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 using System;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace MLTD.GenericSystem
 {
@@ -75,6 +77,12 @@ namespace MLTD.GenericSystem
             // that Wasn't going to be visited anymore. 
         }
 
+        void Start()
+        {
+            if(!bootCompleted)
+                StartCoroutine(BootFlow());
+        }
+        
         void ValidateManagers()
         {
             if (!ssm) Debug.LogError("SystemSaveManager missing");
@@ -95,19 +103,7 @@ namespace MLTD.GenericSystem
                 //&& gl_uim
                 ;
         }
-
-        private void OnEnable()
-        {
-            //"Hey Unity — when you finish loading a scene, 
-            //call my HandleSceneLoaded(Scene, LoadSceneMode) method."
-            SceneManager.sceneLoaded += HandleSceneLoaded; 
-        }
-
-        private void OnDisable()
-        {
-            SceneManager.sceneLoaded -= HandleSceneLoaded;
-        }
-
+        
     #region Main Game Flow Logic
 
         void InitGameStates()
@@ -127,11 +123,10 @@ namespace MLTD.GenericSystem
         }
 
         //After Scene is Loaded, check the Scene State
-        private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+        public void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            //Check which Scene you are residing
-            var marker = FindAnyObjectByType<SceneEssentials>();
-            SceneType currentSceneType = marker != null ? marker.sceneType : SceneType.Unknown;
+            var sceneEssentials = FindAnyObjectByType<SceneEssentials>();
+            SceneType currentSceneType = sceneEssentials != null ? sceneEssentials.sceneType : SceneType.Unknown;
 
             //Switch behaviour depends on the Scene Type
             switch (currentSceneType)
@@ -156,6 +151,8 @@ namespace MLTD.GenericSystem
                     Debug.LogWarning("SceneType not recognized.");
                     break;
             }
+
+            sceneEssentials.InitScene();
         }
 
         //Main State Changer
@@ -278,6 +275,105 @@ namespace MLTD.GenericSystem
         {
             newGameEvent.Invoke();
         }
+
+
+#region Boot
+
+        [SerializeField] float progress;
+        
+        [SerializeField] Slider progressBar;
+
+        [SerializeField] UnityEvent onBootCompleted;
+        [SerializeField] public bool bootCompleted = false;
+        [SerializeField] Canvas canvasBoot;
+
+    
+        IEnumerator BootFlow()
+        {
+            if (!canvasBoot.gameObject.activeSelf)
+                canvasBoot.gameObject.SetActive(true);
+
+            yield return WaitForManagers(0f, 0.25f, 0.6f);
+            yield return LoadSaveData(0.25f, 0.5f, 0.6f);
+
+            // Later:
+            // yield return InitAddressables(0.5f, 1f);
+
+            SetProgress(1f);
+
+            // 🔹 HOLD at full
+            yield return new WaitForSeconds(1f); // 0.5–1 sec feels good
+
+            bootCompleted = true;
+            canvasBoot.gameObject.SetActive(false);
+            
+            var sceneEssentials = FindAnyObjectByType<SceneEssentials>();
+            SceneType currentSceneType = sceneEssentials != null ? sceneEssentials.sceneType : SceneType.Unknown;
+            sceneEssentials.InitScene();
+
+            SceneManager.sceneLoaded -= HandleSceneLoaded; 
+            SceneManager.sceneLoaded += HandleSceneLoaded; 
+            Debug.Log("Boot is finished");
+        }
+
+        IEnumerator WaitForManagers(float start, float end, float minDuration)
+        {
+            float timer = 0f;
+
+            while (!SystemsReady || timer < minDuration)
+            {
+                timer += Time.deltaTime;
+
+                float t = Mathf.Clamp01(timer / minDuration);
+                SetProgress(Mathf.Lerp(start, end, t));
+
+                yield return null;
+            }
+
+            SetProgress(end);
+            Debug.Log("All Managers are loaded");
+        }
+
+        IEnumerator LoadSaveData(float start, float end, float minDuration)
+        {
+            SystemSaveManager.Instance.Load();
+
+            float timer = 0f;
+
+            while (timer < minDuration)
+            {
+                timer += Time.deltaTime;
+
+                float t = Mathf.Clamp01(timer / minDuration);
+                SetProgress(Mathf.Lerp(start, end, t));
+
+                yield return null;
+            }
+
+            SetProgress(end);
+            Debug.Log("Save Data is loaded");
+        }
+
+        // IEnumerator InitAddressables(float start, float end)
+        // {
+        //     var handle = Addressables.InitializeAsync();
+
+        //     while (!handle.IsDone)
+        //     {
+        //         float p = Mathf.Lerp(start, end, handle.PercentComplete);
+        //         SetProgress(p);
+        //         yield return null;
+        //     }
+
+        //     SetProgress(end);
+        // }
+
+        public void SetProgress(float value)
+        {
+            progressBar.value = value;
+        }
+
+#endregion
 
     }
 

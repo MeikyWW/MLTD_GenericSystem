@@ -13,11 +13,13 @@ namespace MLTD.GenericSystem
         [SerializeField] Slider progressBar;
 
         [SerializeField] UnityEvent onBootCompleted;
+        [SerializeField] bool bootCompleted = false;
         [SerializeField] Canvas canvasBoot;
 
         void Start()
         {
-            StartCoroutine(BootFlow());
+            if(!bootCompleted)
+                StartCoroutine(BootFlow());
         }
 
         IEnumerator BootFlow()
@@ -33,9 +35,11 @@ namespace MLTD.GenericSystem
             // 🔹 HOLD at full
             yield return new WaitForSeconds(1f); // 0.5–1 sec feels good
 
-            onBootCompleted.Invoke();
+            bootCompleted = true;
             canvasBoot.gameObject.SetActive(false);
-
+            //onBootCompleted.Invoke();
+            //Init Scene
+            
             Debug.Log("Boot is finished");
         }
 
