@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3194158666650070338
 Transform:
   m_ObjectHideFlags: 0
@@ -350,11 +350,11 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  nextDialogueAction:
+  ConfirmAction:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: f9a96ccc-f133-43bb-9324-6791897c38f1
+    m_Id: 6e1f8b49-79c1-49f9-9e0e-a5e0cbe5522c
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -459,6 +459,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   currentActionMap: 
+  previousActionMap: 
   playerInput: {fileID: 3853693645017849409}
   currentSelectedGO: {fileID: 0}
   holdRepeatDelay: 0.5
@@ -816,6 +817,13 @@ MonoBehaviour:
   newGameEvent:
     m_PersistentCalls:
       m_Calls: []
+  progress: 0
+  progressBar: {fileID: 9091198278279851912}
+  onBootCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  bootCompleted: 0
+  canvasBoot: {fileID: 4731153283685115500}
 --- !u!1 &7873055190432052914
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,7 +1107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3939571071460625727
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1360,12 +1368,12 @@ PrefabInstance:
     - target: {fileID: 2555557941586375571, guid: 18a5edefe994785429c1e4c215370794,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2555557941586375571, guid: 18a5edefe994785429c1e4c215370794,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2947052121104526874, guid: 18a5edefe994785429c1e4c215370794,
         type: 3}

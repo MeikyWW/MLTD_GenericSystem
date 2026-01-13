@@ -3,6 +3,45 @@
     "name": "Player Input",
     "maps": [
         {
+            "name": "DIsabled",
+            "id": "4ed4b43f-a419-462e-945a-f069d30856c7",
+            "actions": [
+                {
+                    "name": "AnyInput",
+                    "type": "Button",
+                    "id": "bae80c62-3f72-4ab1-8500-968e142adfc8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "17bb2e0e-16a0-4cb4-a69b-928edb9b3c99",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "902b7d70-d167-4e8a-ae10-10b79c0c1f3b",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "UI",
             "id": "ef6be7d2-5b7c-44b8-9000-3f89c1d7faa2",
             "actions": [
@@ -857,11 +896,11 @@
             ]
         },
         {
-            "name": "Dialogue",
+            "name": "Sequence",
             "id": "cb07fb1d-04c7-422c-9f6a-e39eaa0b365d",
             "actions": [
                 {
-                    "name": "NextDialogue",
+                    "name": "Confirm",
                     "type": "Button",
                     "id": "4b05b44b-cfaf-4550-bf0b-5fb5a07b2da9",
                     "expectedControlType": "",
@@ -878,7 +917,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NextDialogue",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -889,7 +928,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NextDialogue",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
