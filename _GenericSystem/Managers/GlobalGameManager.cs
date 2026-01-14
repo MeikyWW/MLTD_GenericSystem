@@ -45,7 +45,7 @@ namespace MLTD.GenericSystem
         //[SerializeField] public DisplayManager dspm;
         [SerializeField] public GlobalUIManager gl_uim;
 
-        public bool SystemsReady { get; private set; }
+        public bool ManagersReady { get; private set; }
 
         private async void Awake()
         {
@@ -93,7 +93,7 @@ namespace MLTD.GenericSystem
             //if (!dspm) Debug.LogError("DisplayManager missing");
             //if (!gl_uim) Debug.LogError("GlobalUIManager missing");
 
-            SystemsReady =
+            ManagersReady =
                 ssm  
                 && idm
                 && igm  
@@ -307,12 +307,12 @@ namespace MLTD.GenericSystem
             bootCompleted = true;
             canvasBoot.gameObject.SetActive(false);
             
-            var sceneEssentials = FindAnyObjectByType<SceneEssentials>();
-            SceneType currentSceneType = sceneEssentials != null ? sceneEssentials.sceneType : SceneType.Unknown;
-            sceneEssentials.InitScene();
-
             SceneManager.sceneLoaded -= HandleSceneLoaded; 
             SceneManager.sceneLoaded += HandleSceneLoaded; 
+            
+            //manual init scene
+            HandleSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+
             Debug.Log("Boot is finished");
         }
 
@@ -320,7 +320,7 @@ namespace MLTD.GenericSystem
         {
             float timer = 0f;
 
-            while (!SystemsReady || timer < minDuration)
+            while (!ManagersReady || timer < minDuration)
             {
                 timer += Time.deltaTime;
 
