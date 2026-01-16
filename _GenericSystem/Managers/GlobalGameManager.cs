@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.AddressableAssets;
 using System;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -40,14 +39,14 @@ namespace MLTD.GenericSystem
         [SerializeField] public SystemSaveManager ssm;
         [SerializeField] public InputDeviceManager idm;
         [SerializeField] public InputGameplayManager igm;
-        [SerializeField] public AudioManager aum;
         [SerializeField] public LocalizationManager lcm;
-        //[SerializeField] public DisplayManager dspm;
+        [SerializeField] public AudioManager aum;
         [SerializeField] public GlobalUIManager gl_uim;
+        //[SerializeField] public DisplayManager dspm;
 
         public bool ManagersReady { get; private set; }
 
-        private async void Awake()
+        void Awake()
         {
             if (Instance == null)
             {
@@ -60,16 +59,6 @@ namespace MLTD.GenericSystem
                 return;
             }
 
-            ssm = SystemSaveManager.Instance;
-            idm = InputDeviceManager.Instance;
-            igm = InputGameplayManager.Instance;
-            aum = AudioManager.Instance;
-            lcm = LocalizationManager.Instance;
-            //dspm = DisplayManager.Instance;
-            //gl_uim = GlobalUIManager.Instance;
-            
-            ValidateManagers();
-
             InitGameStates();
 
             // Should be called only once Per Lifetime of the game. 
@@ -79,15 +68,38 @@ namespace MLTD.GenericSystem
 
         void Start()
         {
+            StartCoroutine(InitManagersRoutine());
+
             if(!bootCompleted)
                 StartCoroutine(BootFlow());
         }
         
+        IEnumerator InitManagersRoutine()
+        {
+            // Wait until all singleton Instances exist
+            yield return new WaitUntil(() =>
+                SystemSaveManager.Instance &&
+                InputDeviceManager.Instance &&
+                InputGameplayManager.Instance &&
+                LocalizationManager.Instance &&
+                AudioManager.Instance
+            );
+
+            ssm = SystemSaveManager.Instance;
+            idm = InputDeviceManager.Instance;
+            igm = InputGameplayManager.Instance;
+            lcm = LocalizationManager.Instance;
+            aum = AudioManager.Instance;
+
+            ValidateManagers();
+        }
+
+
         void ValidateManagers()
         {
             if (!ssm) Debug.LogError("SystemSaveManager missing");
             if (!idm) Debug.LogError("InputDeviceManager missing");
-            if (!igm) Debug.LogError("InputDeviceManager missing");
+            if (!igm) Debug.LogError("InputGameplayManager missing");
             if (!aum) Debug.LogError("AudioManager missing");
             if (!lcm) Debug.LogError("LocalizationManager missing");
             //if (!dspm) Debug.LogError("DisplayManager missing");
@@ -336,7 +348,7 @@ namespace MLTD.GenericSystem
 
         IEnumerator LoadSaveData(float start, float end, float minDuration)
         {
-            SystemSaveManager.Instance.Load();
+            // SystemSaveManager.Instance.Load();
 
             float timer = 0f;
 
