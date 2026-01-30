@@ -924,7 +924,18 @@
                 {
                     "name": "",
                     "id": "82675ef2-b52a-4273-990c-3a5287372cbd",
-                    "path": "",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe08f3e2-fc4c-4f68-a0ea-34b13ed9e38e",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -41,6 +41,9 @@ public class GlobalLoadingScreen : MonoBehaviour
             yield return null;
         }
         
+        // 🔹 HOLD at full
+            yield return new WaitForSeconds(1f); // 0.5–1 sec feels good
+            
         gameObject.SetActive(false);
 
     }

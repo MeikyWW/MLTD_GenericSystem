@@ -294,8 +294,6 @@ namespace MLTD.GenericSystem
         [SerializeField] float progress;
         
         [SerializeField] Slider progressBar;
-
-        [SerializeField] UnityEvent onBootCompleted;
         [SerializeField] public bool bootCompleted = false;
         [SerializeField] Canvas canvasBoot;
 
