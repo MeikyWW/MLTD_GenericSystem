@@ -115,181 +115,8 @@ namespace MLTD.GenericSystem
                 //&& gl_uim
                 ;
         }
-        
-    #region Main Game Flow Logic
-
-        void InitGameStates()
-        {
-            gameStateOnEnterHandlers = new Dictionary<GameStates, Action>
-            {
-                { GameStates.Init,      OnEnter_InitState },
-                { GameStates.Splash,    OnEnter_SplashState },
-                { GameStates.Title,     OnEnter_TitleState },
-                { GameStates.MainGameplay,  OnEnter_GameplayState },
-                { GameStates.Cutscene,  OnEnter_CutsceneState },
-                //{ GameStates.MainMenu,  MainMenuState() },
-                //{ GameStates.MiniGame,  GameoverState() },
-            };
-
-            Debug.Log("Init Game States Completed");
-        }
-
-        //After Scene is Loaded, check the Scene State
-        public void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            var sceneEssentials = FindAnyObjectByType<SceneEssentials>();
-            SceneType currentSceneType = sceneEssentials != null ? sceneEssentials.sceneType : SceneType.Unknown;
-
-            //Switch behaviour depends on the Scene Type
-            switch (currentSceneType)
-            {
-                case SceneType.Splash:
-                    SetGameState(GameStates.Splash);
-                    break;
-
-                case SceneType.Title:
-                    SetGameState(GameStates.Title);
-                    break;
-
-                case SceneType.Gameplay:
-                    SetGameState(GameStates.MainGameplay);
-                    break;
-                
-                case SceneType.Cutscene:
-                    SetGameState(GameStates.Cutscene);
-                    break;
-
-                default:
-                    Debug.LogWarning("SceneType not recognized.");
-                    break;
-            }
-
-            sceneEssentials.InitScene();
-        }
-
-        //Main State Changer
-        public void SetGameState(GameStates newState)
-        {
-            previousGameState = currentGameState;
-            currentGameState = newState;
-
-            OnGameStateChanged?.Invoke(currentGameState);
-
-            if (gameStateOnEnterHandlers.TryGetValue(CurrentGameState, out Action action)) // Call On Entering the states
-            {
-                action.Invoke();
-            }
-            else
-            {
-                Debug.LogWarning($"State {CurrentGameState} not implemented.");
-            }
-        }
-
-    #endregion
-
-    #region State
-        public void OnEnter_InitState()
-        {
-            Debug.Log("Entering InitState");
-        }
-        public void OnEnter_SplashState()
-        {
-            Debug.Log("Entering Splash State");
-        }
-
-        public void OnEnter_TitleState() // Called when SplashScreen Logo are done Played
-        {
-            Debug.Log("Entering Title State");
-        }
-        public void OnEnter_GameplayState()
-        {
-            Debug.Log("Entering Gameplay State");
-        }public void OnEnter_CutsceneState()
-        {
-            Debug.Log("Entering Cutscene State");
-        }
-    #endregion
-
-    #region Scene Loader
-
-        private IEnumerator LoadSceneRoutine(string sceneName, bool useLoadingScreen)
-        {
-            if (string.IsNullOrEmpty(previousScene))
-            {
-                previousScene = SceneManager.GetActiveScene().name;
-            }
-
-            else
-            {
-                previousScene = currentScene;
-            }
-
-            isLoadingScenes = true;
-
-            //call Loading Screen 
-            if (useLoadingScreen)
-                GlobalUIManager.Instance.CallLoadingScreen();
-
-            //wait for loading scene transition first
-            yield return new WaitForSeconds(1f);
-
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-
-            while (!asyncLoad.isDone)
-            {
-                yield return null; // Wait until the scene fully loads
-            }
-
-            isLoadingScenes = false;
-            currentScene = sceneName;
-
-        }
-
-        public void LoadScene(string sceneName)
-        {
-            StartCoroutine(LoadSceneRoutine(sceneName, false));
-        }
-        public void LoadScene(string sceneName, bool useLoadingScreen)
-        {
-            StartCoroutine(LoadSceneRoutine(sceneName, useLoadingScreen));
-        }
-
-        public void ReloadCurrentScene(bool useLoadingScreen)
-        {
-            Scene currentScene = SceneManager.GetActiveScene();
-
-            StartCoroutine(LoadSceneRoutine(currentScene.name, useLoadingScreen));
-        }
-
-        public void LoadTitleScreen()
-        {
-            LoadScene("TitleScreen");
-        }
-
-    #endregion
-
-        public void QuitGame()
-        {
-            // If running in the Unity Editor
-    #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-
-    #else
-            // If running in a build
-            Application.Quit();
-
-    #endif
-        }
-
-        [SerializeField] UnityEvent newGameEvent;
-
-        public void NewGame()
-        {
-            newGameEvent.Invoke();
-        }
-
-
-#region Boot
+    
+    #region Boot
 
         [SerializeField] float progress;
         
@@ -384,6 +211,176 @@ namespace MLTD.GenericSystem
         }
 
 #endregion
+
+    #region Game State
+        void InitGameStates()
+        {
+            gameStateOnEnterHandlers = new Dictionary<GameStates, Action>
+            {
+                { GameStates.Init,      OnEnter_InitState },
+                { GameStates.Splash,    OnEnter_SplashState },
+                { GameStates.Title,     OnEnter_TitleState },
+                { GameStates.MainGameplay,  OnEnter_GameplayState },
+                { GameStates.Cutscene,  OnEnter_CutsceneState },
+                //{ GameStates.MainMenu,  MainMenuState() },
+                //{ GameStates.MiniGame,  GameoverState() },
+            };
+
+            Debug.Log("Init Game States Completed");
+        }
+
+        //Main State Changer
+        public void SetGameState(GameStates newState)
+        {
+            previousGameState = currentGameState;
+            currentGameState = newState;
+
+            OnGameStateChanged?.Invoke(currentGameState);
+
+            if (gameStateOnEnterHandlers.TryGetValue(CurrentGameState, out Action action)) // Call On Entering the states
+            {
+                action.Invoke();
+            }
+            else
+            {
+                Debug.LogWarning($"State {CurrentGameState} not implemented.");
+            }
+        }
+
+
+        public void OnEnter_InitState()
+        {
+            Debug.Log("Entering InitState");
+        }
+        public void OnEnter_SplashState()
+        {
+            Debug.Log("Entering Splash State");
+        }
+
+        public void OnEnter_TitleState() // Called when SplashScreen Logo are done Played
+        {
+            Debug.Log("Entering Title State");
+        }
+        public void OnEnter_GameplayState()
+        {
+            Debug.Log("Entering Gameplay State");
+        }public void OnEnter_CutsceneState()
+        {
+            Debug.Log("Entering Cutscene State");
+        }
+    #endregion
+
+    #region Scene Loader
+         //After Scene is Loaded, check the Scene State
+        public void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            var sceneEssentials = FindAnyObjectByType<SceneEssentials>();
+            SceneType currentSceneType = sceneEssentials != null ? sceneEssentials.sceneType : SceneType.Unknown;
+
+            //Switch behaviour depends on the Scene Type
+            switch (currentSceneType)
+            {
+                case SceneType.Splash:
+                    SetGameState(GameStates.Splash);
+                    break;
+
+                case SceneType.Title:
+                    SetGameState(GameStates.Title);
+                    break;
+
+                case SceneType.Gameplay:
+                    SetGameState(GameStates.MainGameplay);
+                    break;
+                
+                case SceneType.Cutscene:
+                    SetGameState(GameStates.Cutscene);
+                    break;
+
+                default:
+                    Debug.LogWarning("SceneType not recognized.");
+                    break;
+            }
+
+            sceneEssentials.InitScene();
+        }
+
+        private IEnumerator LoadSceneRoutine(string sceneName, bool useLoadingScreen)
+        {
+            if (string.IsNullOrEmpty(previousScene))
+            {
+                previousScene = SceneManager.GetActiveScene().name;
+            }
+
+            else
+            {
+                previousScene = currentScene;
+            }
+
+            isLoadingScenes = true;
+
+            //call Loading Screen 
+            if (useLoadingScreen)
+                GlobalUIManager.Instance.CallLoadingScreen();
+
+            //wait for loading scene transition first
+            yield return new WaitForSeconds(1f);
+
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+
+            while (!asyncLoad.isDone)
+            {
+                yield return null; // Wait until the scene fully loads
+            }
+
+            isLoadingScenes = false;
+            currentScene = sceneName;
+
+        }
+
+        public void LoadScene(string sceneName)
+        {
+            StartCoroutine(LoadSceneRoutine(sceneName, false));
+        }
+        
+        public void LoadScene(string sceneName, bool useLoadingScreen)
+        {
+            StartCoroutine(LoadSceneRoutine(sceneName, useLoadingScreen));
+        }
+
+        public void ReloadCurrentScene(bool useLoadingScreen)
+        {
+            Scene currentScene = SceneManager.GetActiveScene();
+
+            StartCoroutine(LoadSceneRoutine(currentScene.name, useLoadingScreen));
+        }
+
+        public void LoadTitleScreen()
+        {
+            LoadScene("TitleScreen");
+        }
+
+    #endregion
+
+        public void QuitGame()
+        {
+            // If running in the Unity Editor
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+
+    #else
+            // If running in a build
+            Application.Quit();
+
+    #endif
+        }
+
+        [SerializeField] UnityEvent newGameEvent;
+
+        public void NewGame()
+        {
+            newGameEvent.Invoke();
+        }
+
 
     }
 
