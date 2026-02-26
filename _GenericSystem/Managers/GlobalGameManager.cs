@@ -29,9 +29,11 @@ namespace MLTD.GenericSystem
         [Header("Track Scenes (ReadOnly)")]
         public string previousScene;
         public string currentScene;
-        
-        [SerializeField] private bool isLoadingScenes;
-        public bool IsLoadingScenes => isLoadingScenes;
+
+        [Header("Loading Screen State")]
+        [SerializeField] private bool isLoadingScreenProgressing;
+        public bool IsLoadingScreenProgressing => isLoadingScreenProgressing;
+        public event Action<bool> OnLoadingScreenStateChanged;
 
         private Dictionary<GameStates, Action> gameStateOnEnterHandlers;
 
@@ -72,6 +74,9 @@ namespace MLTD.GenericSystem
 
             if(!bootCompleted)
                 StartCoroutine(BootFlow());
+            
+            // Initialize loading screen state tracking
+            UpdateLoadingScreenState();
         }
         
         IEnumerator InitManagersRoutine()
@@ -316,11 +321,11 @@ namespace MLTD.GenericSystem
                 previousScene = currentScene;
             }
 
-            isLoadingScenes = true;
-
             //call Loading Screen 
             if (useLoadingScreen)
+            {
                 GlobalUIManager.Instance.CallLoadingScreen();
+            }
 
             //wait for loading scene transition first
             yield return new WaitForSeconds(1f);
@@ -332,8 +337,13 @@ namespace MLTD.GenericSystem
                 yield return null; // Wait until the scene fully loads
             }
 
-            isLoadingScenes = false;
             currentScene = sceneName;
+            
+            // Update loading state after scene loads (loading screen will handle its own disable)
+            if (useLoadingScreen)
+            {
+                UpdateLoadingScreenState();
+            }
 
         }
 
@@ -357,6 +367,27 @@ namespace MLTD.GenericSystem
         public void LoadTitleScreen()
         {
             LoadScene("TitleScreen");
+        }
+
+        /// <summary>
+        /// Updates the loading screen state by checking both scene loading and UI visibility.
+        /// Fires OnLoadingScreenStateChanged event when state changes.
+        /// </summary>
+        public void UpdateLoadingScreenState()
+        {
+            bool wasProgressing = isLoadingScreenProgressing;
+            
+            // Check if loading screen UI is visible
+            bool uiLoading = GlobalUIManager.Instance != null && 
+                           GlobalUIManager.Instance.canvasLoading != null && 
+                           GlobalUIManager.Instance.canvasLoading.gameObject.activeSelf;
+            
+            isLoadingScreenProgressing = uiLoading;
+
+            if (wasProgressing != isLoadingScreenProgressing)
+            {
+                OnLoadingScreenStateChanged?.Invoke(isLoadingScreenProgressing);
+            }
         }
 
     #endregion

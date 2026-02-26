@@ -23,6 +23,11 @@ namespace MLTD.GenericSystem
         public void CallLoadingScreen()
         {
             canvasLoading.gameObject.SetActive(true);
+
+            if (GlobalGameManager.Instance != null)
+            {
+                GlobalGameManager.Instance.UpdateLoadingScreenState();
+            }
         }
     
     }

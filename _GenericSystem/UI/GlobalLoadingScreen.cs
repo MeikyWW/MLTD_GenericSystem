@@ -21,6 +21,10 @@ public class GlobalLoadingScreen : MonoBehaviour
 
     private void OnDisable()
     {
+        if (GlobalGameManager.Instance != null)
+        {
+            GlobalGameManager.Instance.UpdateLoadingScreenState();
+        }
     }
 
     Action DisableLoading()
