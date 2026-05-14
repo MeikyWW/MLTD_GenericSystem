@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,11 +9,14 @@ namespace MLTD.GenericSystem
     {
         public static InputGameplayManager Instance { get; private set; }
 
+        /// <summary>
+        /// Raised after the active action map has switched and <see cref="InitSelectedActionMap"/> has run.
+        /// Arguments: previous map name (may be null/empty on first switch), then current map name.
+        /// </summary>
+        public static event Action<string, string> OnInputMapChanged;
+
         /// <summary>Same <see cref="PlayerInput"/> used for all action maps; gameplay bindings live in the game project.</summary>
         public PlayerInput PlayerInput => playerInput;
-
-        //Sequence
-        [HideInInspector] public InputAction ConfirmAction;
 
 #region GENERIC_INPUT (safe for package)
         //UI
@@ -37,15 +41,21 @@ namespace MLTD.GenericSystem
             }
         }
 
+        void OnDestroy()
+        {
+            if (GlobalGameManager.Instance != null)
+                GlobalGameManager.Instance.OnGameStateChanged -= ApplyActionMapFromGameState;
+        }
+
         private void Start()
         {
             DisableAllInput(); // Start disabled (During Splash Screen)
 
-            GlobalGameManager.Instance.OnGameStateChanged += OnInputMapChange;
-            OnInputMapChange(GlobalGameManager.Instance.CurrentGameState);
+            GlobalGameManager.Instance.OnGameStateChanged += ApplyActionMapFromGameState;
+            ApplyActionMapFromGameState(GlobalGameManager.Instance.CurrentGameState);
         }
 
-        void OnInputMapChange(GameStates state)
+        void ApplyActionMapFromGameState(GameStates state)
         {
             switch (state)
             {
@@ -82,13 +92,6 @@ namespace MLTD.GenericSystem
             TabRightAction = actionMapMenu.FindAction("TabRight");
         }
 
-        private void InitSequenceActions()
-        {
-            playerInput.ActivateInput();
-            InputActionMap actionMapSequence = playerInput.actions.FindActionMap(ActionMapType.Sequence.ToString());
-            ConfirmAction = actionMapSequence.FindAction("Confirm");
-        }
-
     #endregion
 
     #region Handler
@@ -96,18 +99,22 @@ namespace MLTD.GenericSystem
         {
             if (currentActionMap == actionMap) return;
 
+            string mapBeforeSwitch = currentActionMap;
             previousActionMap = currentActionMap;
             currentActionMap = actionMap;
 
             DisableAllInput();
             playerInput.SwitchCurrentActionMap(actionMap);
             InitSelectedActionMap();
+
+            OnInputMapChanged?.Invoke(mapBeforeSwitch, currentActionMap);
         }
 
         public void BacktoPreviousActionMap()
         {   
             if (string.IsNullOrEmpty(previousActionMap)) return;
 
+            string mapBeforeSwitch = currentActionMap;
             string temp = currentActionMap;
 
             currentActionMap = previousActionMap;
@@ -116,13 +123,12 @@ namespace MLTD.GenericSystem
             DisableAllInput();
             playerInput.SwitchCurrentActionMap(currentActionMap);
             InitSelectedActionMap();
+
+            OnInputMapChanged?.Invoke(mapBeforeSwitch, currentActionMap);
         }
 
         private IEnumerable<InputAction> GetAllActions()
         {
-            //Sequence
-            yield return ConfirmAction;
-
             //UI
             yield return TabLeftAction;
             yield return TabRightAction;
@@ -142,8 +148,6 @@ namespace MLTD.GenericSystem
             {
                 // Player map actions are bound in the game project (MainGameplayInputManager.BindPlayerActions).
             }
-            else if (currentActionMap == ActionMapType.Sequence.ToString())
-                InitSequenceActions();
             else if (currentActionMap == ActionMapType.UI.ToString())
                 InitUIInput();
         }
