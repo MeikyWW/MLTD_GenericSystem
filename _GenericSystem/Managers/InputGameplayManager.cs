@@ -11,6 +11,7 @@ namespace MLTD.GenericSystem
         //Gameplay
         public InputAction attackAction;
         public InputAction speAttackAction;
+        public InputAction rangeAttackAction;
         public InputAction moveAction;
         public InputAction jumpAction;
         public InputAction dashAction;
@@ -102,6 +103,7 @@ namespace MLTD.GenericSystem
             pauseAction = actionMapPlayer.FindAction("Pause");
             attackAction = actionMapPlayer.FindAction("Attack");
             speAttackAction = actionMapPlayer.FindAction("SpecialAttack");
+            rangeAttackAction = actionMapPlayer.FindAction("RangeAttack");
         }
 
         public void InitMenuInput()
@@ -168,6 +170,7 @@ namespace MLTD.GenericSystem
             //Main Gameplay
             yield return attackAction;
             yield return speAttackAction;
+            yield return rangeAttackAction;
             yield return moveAction;
             yield return jumpAction;
             yield return dashAction;
