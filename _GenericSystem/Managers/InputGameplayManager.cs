@@ -6,31 +6,13 @@ namespace MLTD.GenericSystem
 {
     public class InputGameplayManager : MonoBehaviour
     {
-        public static InputGameplayManager Instance { get; private set; } 
-            
-        //Gameplay
-        public InputAction attackAction;
-        public InputAction speAttackAction;
-        public InputAction rangeAttackAction;
-        public InputAction moveAction;
-        public InputAction jumpAction;
-        public InputAction dashAction;
-        public InputAction interactAction;
-        public InputAction pauseAction;
+        public static InputGameplayManager Instance { get; private set; }
+
+        /// <summary>Same <see cref="PlayerInput"/> used for all action maps; gameplay bindings live in the game project.</summary>
+        public PlayerInput PlayerInput => playerInput;
 
         //Sequence
         [HideInInspector] public InputAction ConfirmAction;
-
-        //Menu
-        [HideInInspector] public InputAction pauseMenuAction;
-        [HideInInspector] public InputAction nextMenuAction;
-        [HideInInspector] public InputAction previousMenuAction;
-        [HideInInspector] public InputAction upSelectAction;
-        [HideInInspector] public InputAction downSelectAction;
-        [HideInInspector] public InputAction leftSelectAction;
-        [HideInInspector] public InputAction rightSelectAction;
-        [HideInInspector] public InputAction confirmAction;
-        [HideInInspector] public InputAction returnAction;
 
 #region GENERIC_INPUT (safe for package)
         //UI
@@ -92,35 +74,6 @@ namespace MLTD.GenericSystem
             playerInput.DeactivateInput();
         }
 
-        public void InitPlayerInput()
-        {
-            playerInput.ActivateInput();
-            InputActionMap actionMapPlayer = playerInput.actions.FindActionMap(ActionMapType.Player.ToString());
-            moveAction = actionMapPlayer.FindAction("Move");
-            jumpAction = actionMapPlayer.FindAction("Jump");
-            dashAction = actionMapPlayer.FindAction("Dash");
-            interactAction = actionMapPlayer.FindAction("Interact");
-            pauseAction = actionMapPlayer.FindAction("Pause");
-            attackAction = actionMapPlayer.FindAction("Attack");
-            speAttackAction = actionMapPlayer.FindAction("SpecialAttack");
-            rangeAttackAction = actionMapPlayer.FindAction("RangeAttack");
-        }
-
-        public void InitMenuInput()
-        {
-            playerInput.ActivateInput();
-            InputActionMap actionMapMenu = playerInput.actions.FindActionMap(ActionMapType.Menu.ToString());
-            pauseAction = actionMapMenu.FindAction("Pause");
-            nextMenuAction = actionMapMenu.FindAction("NextTab");
-            previousMenuAction = actionMapMenu.FindAction("PreviousTab");
-            upSelectAction = actionMapMenu.FindAction("Up");
-            downSelectAction = actionMapMenu.FindAction("Down");
-            leftSelectAction = actionMapMenu.FindAction("Left");
-            rightSelectAction = actionMapMenu.FindAction("Right");
-            confirmAction = actionMapMenu.FindAction("Confirm");
-            returnAction = actionMapMenu.FindAction("Return");
-        }
-
         public void InitUIInput()
         {
             playerInput.ActivateInput();
@@ -167,29 +120,8 @@ namespace MLTD.GenericSystem
 
         private IEnumerable<InputAction> GetAllActions()
         {
-            //Main Gameplay
-            yield return attackAction;
-            yield return speAttackAction;
-            yield return rangeAttackAction;
-            yield return moveAction;
-            yield return jumpAction;
-            yield return dashAction;
-            yield return interactAction;
-            yield return pauseAction;
-
             //Sequence
             yield return ConfirmAction;
-
-            //Menu
-            yield return pauseMenuAction;
-            yield return nextMenuAction;
-            yield return previousMenuAction;
-            yield return upSelectAction;
-            yield return downSelectAction;
-            yield return leftSelectAction;
-            yield return rightSelectAction;
-            yield return confirmAction;
-            yield return returnAction;
 
             //UI
             yield return TabLeftAction;
@@ -206,12 +138,10 @@ namespace MLTD.GenericSystem
 
         public void InitSelectedActionMap()
         {
-            if (currentActionMap == ActionMapType.Disabled.ToString())
-                InitMenuInput();
-            else if (currentActionMap == ActionMapType.Player.ToString())
-                InitPlayerInput();
-            else if (currentActionMap == ActionMapType.Menu.ToString())
-                InitMenuInput();
+            if (currentActionMap == ActionMapType.Player.ToString())
+            {
+                // Player map actions are bound in the game project (MainGameplayInputManager.BindPlayerActions).
+            }
             else if (currentActionMap == ActionMapType.Sequence.ToString())
                 InitSequenceActions();
             else if (currentActionMap == ActionMapType.UI.ToString())
