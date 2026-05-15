@@ -57,7 +57,7 @@ namespace MLTD.GenericSystem
             if (currentActionMap == actionMap) return;
 
             //Signal all Outside the generic ActionMap to be disabled, they live outside of Generic System.
-            OnActionMapAllDisabled?.Invoke(currentActionMap, currentActionMap);
+            OnActionMapAllDisabled?.Invoke(currentActionMap, previousActionMap);
 
 
             previousActionMap = currentActionMap;
@@ -66,11 +66,11 @@ namespace MLTD.GenericSystem
             switch(actionMap)
             {
                 case ActionMapType.Player:
-                    OnActionMapPlayerEnabled?.Invoke(previousActionMap, currentActionMap);
+                    OnActionMapPlayerEnabled?.Invoke(currentActionMap, previousActionMap);
                     break;
 
                 case ActionMapType.Sequence:
-                    OnActionMapSequenceEnabled?.Invoke(previousActionMap, currentActionMap);
+                    OnActionMapSequenceEnabled?.Invoke(currentActionMap, previousActionMap);
                     break;
 
                 case ActionMapType.UI:
