@@ -9,13 +9,7 @@ namespace MLTD.GenericSystem
     {
         public static InputGameplayManager Instance { get; private set; }
 
-        /// <summary>
-        /// Raised after the active action map has switched and <see cref="InitSelectedActionMap"/> has run.
-        /// Arguments: previous map name (may be null/empty on first switch), then current map name.
-        /// </summary>
-        public static event Action<string, string> OnInputMapChanged;
-
-        /// <summary>Same <see cref="PlayerInput"/> used for all action maps; gameplay bindings live in the game project.</summary>
+        [SerializeField] PlayerInput playerInput;
         public PlayerInput PlayerInput => playerInput;
 
 #region GENERIC_INPUT (safe for package)
@@ -24,15 +18,18 @@ namespace MLTD.GenericSystem
         [HideInInspector] public InputAction TabRightAction;
 #endregion
 
-        public string currentActionMap;
-        public string previousActionMap;
-        [SerializeField] PlayerInput playerInput;
+        public ActionMapType currentActionMap;
+        public ActionMapType previousActionMap;
+
 
         public GameObject currentSelectedGO;
-        
-        //plugins
-        //public FixedJoystick movementJoystick;
 
+        //Events
+        public event Action<ActionMapType, ActionMapType> OnActionMapAllDisabled;
+        public event Action<ActionMapType, ActionMapType> OnActionMapPlayerEnabled;
+        public event Action<ActionMapType, ActionMapType> OnActionMapSequenceEnabled;
+
+        
         void Awake()
         {
             if (Instance == null)
@@ -43,116 +40,115 @@ namespace MLTD.GenericSystem
 
         void OnDestroy()
         {
-            if (GlobalGameManager.Instance != null)
-                GlobalGameManager.Instance.OnGameStateChanged -= ApplyActionMapFromGameState;
+            // if (GlobalGameManager.Instance != null)
+            //     GlobalGameManager.Instance.OnGameStateChanged -= ApplyActionMapFromGameState;
         }
 
         private void Start()
         {
-            DisableAllInput(); // Start disabled (During Splash Screen)
 
-            GlobalGameManager.Instance.OnGameStateChanged += ApplyActionMapFromGameState;
-            ApplyActionMapFromGameState(GlobalGameManager.Instance.CurrentGameState);
+            // GlobalGameManager.Instance.OnGameStateChanged += ApplyActionMapFromGameState;
+            // ApplyActionMapFromGameState(GlobalGameManager.Instance.CurrentGameState);
         }
 
-        void ApplyActionMapFromGameState(GameStates state)
-        {
-            switch (state)
-            {
-                case GameStates.Splash:        
-                    SwitchActionMap(ActionMapType.Disabled.ToString());
-                    break;
-
-                case GameStates.Title:
-                    SwitchActionMap(ActionMapType.UI.ToString());
-                    break;
-                
-                case GameStates.MainGameplay:
-                    SwitchActionMap(ActionMapType.Player.ToString()); 
-                    break;
-                
-                case GameStates.Cutscene:
-                    SwitchActionMap(ActionMapType.Disabled.ToString());
-                    break;
-            }
-        }
-        
-    #region Init
-
-        public void DisablePlayerInput()
-        {
-            playerInput.DeactivateInput();
-        }
-
-        public void InitUIInput()
-        {
-            playerInput.ActivateInput();
-            InputActionMap actionMapMenu = playerInput.actions.FindActionMap(ActionMapType.UI.ToString());
-            TabLeftAction = actionMapMenu.FindAction("TabLeft");
-            TabRightAction = actionMapMenu.FindAction("TabRight");
-        }
-
-    #endregion
-
-    #region Handler
-        public void SwitchActionMap(string actionMap)
+        #region Handler
+        public void SwitchActionMap(ActionMapType actionMap)
         {
             if (currentActionMap == actionMap) return;
 
-            string mapBeforeSwitch = currentActionMap;
+            //Signal all Outside the generic ActionMap to be disabled, they live outside of Generic System.
+            OnActionMapAllDisabled?.Invoke(currentActionMap, currentActionMap);
+
+
             previousActionMap = currentActionMap;
             currentActionMap = actionMap;
 
-            DisableAllInput();
-            playerInput.SwitchCurrentActionMap(actionMap);
-            InitSelectedActionMap();
+            switch(actionMap)
+            {
+                case ActionMapType.Player:
+                    OnActionMapPlayerEnabled?.Invoke(previousActionMap, currentActionMap);
+                    break;
 
-            OnInputMapChanged?.Invoke(mapBeforeSwitch, currentActionMap);
+                case ActionMapType.Sequence:
+                    OnActionMapSequenceEnabled?.Invoke(previousActionMap, currentActionMap);
+                    break;
+
+                case ActionMapType.UI:
+                    //Special: ActionMap UI is never disabled (It doesn't have Disabler), But can be called, meaning all other action map is disabled.
+                    ActivateActionMapUI();
+                    break;
+                case ActionMapType.Disabled:
+                    //Doesn't Send any signal so essentially all actionmap is disabled
+                    break;
+            }
+
+            //Signal specific Action Map outside the generic ActionMap to be disabled, they live outside of Generic System.
         }
 
         public void BacktoPreviousActionMap()
         {   
-            if (string.IsNullOrEmpty(previousActionMap)) return;
+            ActionMapType mapBeforeSwitch = previousActionMap;
 
-            string mapBeforeSwitch = currentActionMap;
-            string temp = currentActionMap;
+            previousActionMap = currentActionMap;
 
-            currentActionMap = previousActionMap;
-            previousActionMap = temp;
-
-            DisableAllInput();
-            playerInput.SwitchCurrentActionMap(currentActionMap);
-            InitSelectedActionMap();
-
-            OnInputMapChanged?.Invoke(mapBeforeSwitch, currentActionMap);
+            SwitchActionMap(mapBeforeSwitch);
         }
 
-        private IEnumerable<InputAction> GetAllActions()
+        #endregion
+
+        // void ApplyActionMapFromGameState(GameStates state)
+        // {
+        //     switch (state)
+        //     {
+        //         case GameStates.Splash:        
+        //             SwitchActionMap(ActionMapType.Disabled);
+        //             break;
+
+        //         case GameStates.Title:
+        //             SwitchActionMap(ActionMapType.UI);
+        //             break;
+                
+        //         case GameStates.MainGameplay:
+        //             SwitchActionMap(ActionMapType.Player); 
+        //             break;
+                
+        //         case GameStates.Cutscene:
+        //             SwitchActionMap(ActionMapType.Disabled);
+        //             break;
+        //     }
+        // }
+        
+        //Used for Title Screen so it is valid for Generic System
+    #region UI Action Map 
+
+        public void ActivateActionMapUI()
         {
-            //UI
-            yield return TabLeftAction;
-            yield return TabRightAction;
+            InputActionMap actionMapUI = playerInput.actions.FindActionMap("Dialogue");
+            actionMapUI.Enable();
+
+            TabLeftAction = actionMapUI.FindAction("TabLeft");
+            TabRightAction = actionMapUI.FindAction("TabRight");
+
+            TabLeftAction.performed -= OnTabLeftPerformed;
+            TabRightAction.performed -= OnTaRightPerformed;
+
+            TabLeftAction.performed += OnTabLeftPerformed;
+            TabRightAction.performed += OnTaRightPerformed;
         }
 
-        public void DisableAllInput()
+
+        void OnTabLeftPerformed(InputAction.CallbackContext ctx)
         {
-            foreach (var action in GetAllActions())
-            {
-                action?.Disable();
-            }
+
         }
 
-        public void InitSelectedActionMap()
+        void OnTaRightPerformed(InputAction.CallbackContext ctx)
         {
-            if (currentActionMap == ActionMapType.Player.ToString())
-            {
-                // Player map actions are bound in the game project (MainGameplayInputManager.BindPlayerActions).
-            }
-            else if (currentActionMap == ActionMapType.UI.ToString())
-                InitUIInput();
+
         }
 
     #endregion
+
 
         //utility
         public float holdRepeatDelay = 0.5f;   // Delay before first repeat
@@ -178,26 +174,7 @@ namespace MLTD.GenericSystem
                 timer = 0f; // Reset on release
             }
         }
-        [ContextMenu("SwitchActionMap_Player")]
-        public void SwitchActionMap_Player()
-        {
-            SwitchActionMap(ActionMapType.Player.ToString());
-        }
-        [ContextMenu("SwitchActionMap_Menu")]
-        public void SwitchActionMap_Menu()
-        {
-            SwitchActionMap(ActionMapType.Menu.ToString());
-        }
-        [ContextMenu("SwitchActionMap")]
-        public void SwitchActionMap_UI()
-        {
-            SwitchActionMap(ActionMapType.UI.ToString());
-        }
-        [ContextMenu("SwitchActionMap_Sequence")]
-        public void SwitchActionMap_Sequence()
-        {
-            SwitchActionMap(ActionMapType.Sequence.ToString());
-        }
+   
     }
 }
 
