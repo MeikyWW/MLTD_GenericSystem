@@ -77,51 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &1015177642856265802
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6911090268577575305}
-  - component: {fileID: 3315074545784840414}
-  m_Layer: 0
-  m_Name: Input Device Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6911090268577575305
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015177642856265802}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8001377582059377195}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3315074545784840414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015177642856265802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8e0242bf3e4b5343bfc15e61d6addfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentDeviceInput: 0
 --- !u!1 &1826723546791251809
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +107,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7040137646133243124}
-  - {fileID: 6911090268577575305}
   - {fileID: 3218675704033077796}
   - {fileID: 3194158666650070338}
   - {fileID: 345647966186128461}
@@ -265,6 +219,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -558,9 +513,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3218675704033077796}
   - component: {fileID: 3853693645017849409}
-  - component: {fileID: 2658281298897273139}
+  - component: {fileID: 4777050706303434985}
   m_Layer: 0
-  m_Name: Input Gameplay Manager
+  m_Name: Input Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -612,7 +567,7 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2658281298897273139
+--- !u!114 &4777050706303434985
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -621,167 +576,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6264570632392765282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a95ed8bf3c150234c8d4d9ac0e14ebf0, type: 3}
+  m_Script: {fileID: 11500000, guid: b6247ed3c7893924cb0bea973f74ce76, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  attackAction:
-    m_Name: Attack
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: ae903d94-69cf-4fce-b3b0-35a908c9109e
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  speAttackAction:
-    m_Name: Spe Attack
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 1d3a3b61-e382-4821-81b6-e88121f0b0b8
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  moveAction:
-    m_Name: Move
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: f783bc5e-6c3d-43a4-b867-47e52de280ab
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  jumpAction:
-    m_Name: Jump
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: acd27fd3-2a75-43b1-ab0d-22baa74647f7
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  dashAction:
-    m_Name: Dash
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 18521ed7-c7b4-47f1-88af-4064ec248df6
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  interactAction:
-    m_Name: Interact
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: df77fdea-2444-4580-8db0-5c05b8d14e3d
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  pauseAction:
-    m_Name: Pause
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 2852bb73-6948-408f-8b04-8838d95b8fa5
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  ConfirmAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 6e1f8b49-79c1-49f9-9e0e-a5e0cbe5522c
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  pauseMenuAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 114c9849-8ccb-41ee-bf41-181011c74fee
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  nextMenuAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: ba4daf4a-6d2a-4133-b758-7a4b8b0f88c0
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  previousMenuAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 8a047175-1e61-4718-b3e7-6f70705085ad
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  upSelectAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 621badd0-b1b6-496e-8987-eab2a86b533e
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  downSelectAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: dfc5d187-bf1b-4dfa-a0c0-9d4bec7a70b0
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  leftSelectAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: a917e7de-0d4f-43fb-9e43-9f8f8dd5f81d
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  rightSelectAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: e8125a15-e030-4409-814b-fae55d266fe3
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  confirmAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: e485c787-9c05-4dd6-842f-f208e8975779
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  returnAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: b8bd97d2-7034-4666-9a59-982ada7be074
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
+  m_EditorClassIdentifier: MLTD.GenericSystem::MLTD.GenericSystem.InputManager
+  playerInput: {fileID: 3853693645017849409}
   TabLeftAction:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 75d75f9f-fb7b-41ee-8a09-39b375a4afbb
+    m_Id: 07f4fe9e-dd71-402c-85dd-0950e018e537
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -790,15 +593,15 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 065b65da-0884-4dfb-9d6d-d3eea72a3e18
+    m_Id: 16b3b03b-1fc0-4554-a1c5-f0ee97938248
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  currentActionMap: 
-  previousActionMap: 
-  playerInput: {fileID: 3853693645017849409}
+  currentActionMap: 0
+  previousActionMap: 0
   currentSelectedGO: {fileID: 0}
+  currentDeviceInput: 0
   holdRepeatDelay: 0.5
   holdRepeatRate: 0.1
 --- !u!1 &6473580023564559750
@@ -1144,23 +947,19 @@ MonoBehaviour:
   previousGameState: 0
   previousScene: 
   currentScene: 
-  isLoadingScenes: 0
+  isLoadingScreenProgressing: 0
   ssm: {fileID: 0}
-  idm: {fileID: 0}
-  igm: {fileID: 0}
+  inputManager: {fileID: 0}
   lcm: {fileID: 0}
   aum: {fileID: 0}
   gl_uim: {fileID: 0}
+  progress: 0
+  progressBar: {fileID: 9091198278279851912}
+  bootCompleted: 0
+  canvasBoot: {fileID: 4731153283685115500}
   newGameEvent:
     m_PersistentCalls:
       m_Calls: []
-  progress: 0
-  progressBar: {fileID: 9091198278279851912}
-  onBootCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  bootCompleted: 0
-  canvasBoot: {fileID: 4731153283685115500}
 --- !u!1 &7873055190432052914
 GameObject:
   m_ObjectHideFlags: 0

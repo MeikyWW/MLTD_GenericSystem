@@ -31,8 +31,7 @@ namespace MLTD.GenericSystem
         [SerializeField] UI_PopUpBase[] allPopUpMenu;
 
         [Header("Managers (ReadOnly)")]
-        public InputDeviceManager idm;
-        public InputGameplayManager igm;
+        public InputManager inputManager;
         public AudioManager aum;
 
         private async void Awake()
@@ -45,8 +44,8 @@ namespace MLTD.GenericSystem
             currentMenu = defaultMenu;
             lastSelectedUI = currentMenu.firstSelected;
 
-            idm.OnDeviceChanged += OnDeviceChangeSelected;
-            OnDeviceChangeSelected(idm.CurrentDeviceInput);
+            inputManager.OnDeviceChanged += OnDeviceChangeSelected;
+            OnDeviceChangeSelected(inputManager.CurrentDeviceInput);
 
             SyncDisplayStack();
         }
@@ -73,9 +72,8 @@ namespace MLTD.GenericSystem
 
         async Task GetUsedManagers()
         {
-            idm = InputDeviceManager.Instance;
+            inputManager = InputManager.Instance;
             aum = AudioManager.Instance;
-            igm = InputGameplayManager.Instance;
         }
         
         public void Init()
@@ -235,7 +233,7 @@ namespace MLTD.GenericSystem
         {
             if (uiObject == null) return;
 
-            if (idm.CurrentDeviceInput != DeviceInputType.Gamepad) //only do when the Input is a gamePad
+            if (inputManager.CurrentDeviceInput != DeviceInputType.Gamepad) //only do when the Input is a gamePad
             return;
             
             //selected first object must not play a sound

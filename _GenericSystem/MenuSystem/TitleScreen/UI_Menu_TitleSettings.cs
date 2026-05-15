@@ -43,19 +43,19 @@ namespace MLTD.GenericSystem
             leftTabCallback = ctx => OnNavigateLeftTab(ctx);
             rightTabCallback = ctx => OnNavigateRightTab(ctx);
 
-            menuManager.igm.TabLeftAction.performed += leftTabCallback;
-            menuManager.igm.TabRightAction.performed += rightTabCallback;
+            menuManager.inputManager.TabLeftAction.performed += leftTabCallback;
+            menuManager.inputManager.TabRightAction.performed += rightTabCallback;
             
-            menuManager.idm.OnDeviceChanged += UpdateGamepadUI;
-            UpdateGamepadUI(menuManager.idm.CurrentDeviceInput);
+            menuManager.inputManager.OnDeviceChanged += UpdateGamepadUI;
+            UpdateGamepadUI(menuManager.inputManager.CurrentDeviceInput);
         }
 
         void OnDisable()
         {
-            menuManager.igm.TabLeftAction.performed -= leftTabCallback;
-            menuManager.igm.TabRightAction.performed -= rightTabCallback;
+            menuManager.inputManager.TabLeftAction.performed -= leftTabCallback;
+            menuManager.inputManager.TabRightAction.performed -= rightTabCallback;
 
-            menuManager.idm.OnDeviceChanged -= UpdateGamepadUI;
+            menuManager.inputManager.OnDeviceChanged -= UpdateGamepadUI;
         }
 
         public void OnNavigateLeftTab(InputAction.CallbackContext ctx)
@@ -106,7 +106,7 @@ namespace MLTD.GenericSystem
             activeButton.OnSelect(null);
 
             // 3. Optional audio (gamepad only)
-            if (menuManager.idm.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (menuManager.inputManager.CurrentDeviceInput == DeviceInputType.Gamepad)
             {
                 activeButton.GetComponent<UI_ButtonEffects>()?.PlayAudioWhenSelected(playAudio);
             }

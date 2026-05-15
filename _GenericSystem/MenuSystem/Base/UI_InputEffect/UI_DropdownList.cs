@@ -73,7 +73,7 @@ namespace MLTD.GenericSystem
 
         void OnSelectIndex(int index)
         {
-            if(InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if(InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
                 ScrollToIndex(index);
         }
 

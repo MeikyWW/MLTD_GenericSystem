@@ -39,7 +39,7 @@ namespace MLTD.GenericSystem
 
         public void OnPointerExit(PointerEventData eventData)
         {   
-            if(menuManager.idm.CurrentDeviceInput == DeviceInputType.MouseKeyboard 
+            if(menuManager.inputManager.CurrentDeviceInput == DeviceInputType.MouseKeyboard 
                 && hoverAsSelected)
                 EventSystem.current.SetSelectedGameObject(null);
         }

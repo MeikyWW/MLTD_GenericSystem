@@ -39,8 +39,7 @@ namespace MLTD.GenericSystem
 
         [Header("Managers")]
         [SerializeField] public SystemSaveManager ssm;
-        [SerializeField] public InputDeviceManager idm;
-        [SerializeField] public InputGameplayManager igm;
+        [SerializeField] public InputManager inputManager;
         [SerializeField] public LocalizationManager lcm;
         [SerializeField] public AudioManager aum;
         [SerializeField] public GlobalUIManager gl_uim;
@@ -84,15 +83,13 @@ namespace MLTD.GenericSystem
             // Wait until all singleton Instances exist
             yield return new WaitUntil(() =>
                 SystemSaveManager.Instance &&
-                InputDeviceManager.Instance &&
-                InputGameplayManager.Instance &&
+                InputManager.Instance &&
                 LocalizationManager.Instance &&
                 AudioManager.Instance
             );
 
             ssm = SystemSaveManager.Instance;
-            idm = InputDeviceManager.Instance;
-            igm = InputGameplayManager.Instance;
+            inputManager = InputManager.Instance;
             lcm = LocalizationManager.Instance;
             aum = AudioManager.Instance;
 
@@ -103,8 +100,7 @@ namespace MLTD.GenericSystem
         void ValidateManagers()
         {
             if (!ssm) Debug.LogError("SystemSaveManager missing");
-            if (!idm) Debug.LogError("InputDeviceManager missing");
-            if (!igm) Debug.LogError("InputGameplayManager missing");
+            if (!inputManager) Debug.LogError("InputManager missing");
             if (!aum) Debug.LogError("AudioManager missing");
             if (!lcm) Debug.LogError("LocalizationManager missing");
             //if (!dspm) Debug.LogError("DisplayManager missing");
@@ -112,8 +108,7 @@ namespace MLTD.GenericSystem
 
             ManagersReady =
                 ssm  
-                && idm
-                && igm  
+                && inputManager
                 && aum  
                 && lcm  
                 //&& dspm  

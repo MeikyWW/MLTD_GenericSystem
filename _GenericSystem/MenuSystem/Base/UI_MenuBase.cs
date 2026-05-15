@@ -57,7 +57,7 @@ namespace MLTD.GenericSystem
             {
                 EventSystem.current.firstSelectedGameObject = firstSelected;
                 
-                if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+                if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
                 {   
                     menuManager.SelectUI_FirstObject(firstSelected);
                 }

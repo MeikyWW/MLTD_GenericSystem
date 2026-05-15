@@ -26,11 +26,11 @@ namespace MLTD.GenericSystem
         {
             // Mouse dragging → do nothing
             if (isMouseDragging &&
-                menuManager.idm.CurrentDeviceInput == DeviceInputType.MouseKeyboard)
+                menuManager.inputManager.CurrentDeviceInput == DeviceInputType.MouseKeyboard)
                 return;
 
             // Gamepad → play per step
-            if (menuManager.idm.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (menuManager.inputManager.CurrentDeviceInput == DeviceInputType.Gamepad)
             {
                 PlayAudioWhenSelected(playAudioWhenSelected);
             }
@@ -38,13 +38,13 @@ namespace MLTD.GenericSystem
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (menuManager.idm.CurrentDeviceInput == DeviceInputType.MouseKeyboard)
+            if (menuManager.inputManager.CurrentDeviceInput == DeviceInputType.MouseKeyboard)
                 isMouseDragging = true;
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (menuManager.idm.CurrentDeviceInput == DeviceInputType.MouseKeyboard)
+            if (menuManager.inputManager.CurrentDeviceInput == DeviceInputType.MouseKeyboard)
             {
                 isMouseDragging = false;
                 PlayAudioWhenSelected(playAudioWhenSelected);

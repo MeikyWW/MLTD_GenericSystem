@@ -8584,8 +8584,7 @@ MonoBehaviour:
   allInputEffect: []
   allButton_OpenMenu: []
   allPopUpMenu: []
-  idm: {fileID: 0}
-  igm: {fileID: 0}
+  inputManager: {fileID: 0}
   aum: {fileID: 0}
 --- !u!1 &4071454318478392946
 GameObject:

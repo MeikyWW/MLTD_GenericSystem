@@ -94,7 +94,7 @@ namespace MLTD.GenericSystem
                 return;
             }
 
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(selectedToggle.gameObject);
         }
 
@@ -102,7 +102,7 @@ namespace MLTD.GenericSystem
         {
             ApplyLanguage(toggleEnglish, LanguageType.English, state);
 
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(toggleIndonesian.gameObject);
         }
 
@@ -110,7 +110,7 @@ namespace MLTD.GenericSystem
         {
             ApplyLanguage(toggleIndonesian, LanguageType.Indonesian, state);
             
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(toggleEnglish.gameObject);
         }
 
@@ -118,7 +118,7 @@ namespace MLTD.GenericSystem
         {
             ApplyLanguage(toggleSpanish, LanguageType.Spanish, state);
 
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(togglePtbr.gameObject);
         }
 
@@ -126,7 +126,7 @@ namespace MLTD.GenericSystem
         {
             ApplyLanguage(togglePtbr, LanguageType.Ptbr, state);
 
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(toggleSpanish.gameObject);
         }
 
@@ -134,7 +134,7 @@ namespace MLTD.GenericSystem
         {
             ApplyLanguage(toggleJapanese, LanguageType.Japanese, state);
 
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(toggleSimpCN.gameObject);
         }
 
@@ -142,7 +142,7 @@ namespace MLTD.GenericSystem
         {
             ApplyLanguage(toggleSimpCN, LanguageType.SimplifiedCN, state);
 
-            if (InputDeviceManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
+            if (InputManager.Instance.CurrentDeviceInput == DeviceInputType.Gamepad)
             EventSystem.current.SetSelectedGameObject(toggleJapanese.gameObject);
         }
         

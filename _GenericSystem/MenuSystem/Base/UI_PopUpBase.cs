@@ -97,7 +97,7 @@ namespace MLTD.GenericSystem
         if (menuManager != null)
 
         //set selections
-        if(menuManager.idm.CurrentDeviceInput == DeviceInputType.Gamepad)
+        if(menuManager.inputManager.CurrentDeviceInput == DeviceInputType.Gamepad)
         menuManager.SelectUI_FirstObject(previousMenuLastSelected);
 
         menuManager.lastSelectedUI = menuManager.currentMenu.firstSelected;
