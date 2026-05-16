@@ -11,6 +11,21 @@ namespace MLTD.GenericSystem
         [SerializeField] string TitleScreenSampleScene = "TitleScreen (Samples)";
         [SerializeField] UnityEvent OnSplashScreenCompleted;
 
+        [SerializeField] Canvas splashScreenCanvas;
+        [SerializeField] Animator animator;
+
+        void Start()
+        {
+            splashScreenCanvas.gameObject.SetActive(false);
+        }
+
+        public void InitSplashScreen()
+        {
+            splashScreenCanvas.gameObject.SetActive(true);
+            animator.SetTrigger("PlaySplashScreen");
+        }
+
+        //Called from the Animation Event
         public void SplashScreenCompleted()
         {
             OnSplashScreenCompleted.Invoke();
