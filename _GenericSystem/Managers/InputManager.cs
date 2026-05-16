@@ -23,6 +23,13 @@ namespace MLTD.GenericSystem
         public ActionMapType currentActionMap;
         public ActionMapType previousActionMap;
 
+        [Header("Action Map Enabled State (ReadOnly)")]
+        [SerializeField] private bool isPlayerActionMapEnabled;
+        [SerializeField] private bool isMenuActionMapEnabled;
+        [SerializeField] private bool isSequenceActionMapEnabled;
+        [SerializeField] private bool isUIActionMapEnabled;
+        [SerializeField] private bool isDisabledActionMapEnabled;
+        
         public GameObject currentSelectedGO;
 
         //Events
@@ -44,7 +51,7 @@ namespace MLTD.GenericSystem
                 Instance = this;
             }
 
-            _anyButtonPressSubscription = InputSystem.onAnyButtonPress.Call(OnAnyInput);
+            _anyButtonPressSubscription = InputSystem.onAnyButtonPress.Call(OnAnyButtonPressed);
         }
 
         void OnDestroy()
@@ -52,11 +59,15 @@ namespace MLTD.GenericSystem
             _anyButtonPressSubscription?.Dispose();
             _anyButtonPressSubscription = null;
         }
-
-        public void OnAnyInput(InputControl control)
+        
+        #region Input Device System
+        void OnAnyButtonPressed(InputControl control)
         {
             DeviceDetection(control);
         }
+        // Required by PlayerInput Send Messages for the "AnyInput" action.
+        // Device detection is handled via onAnyButtonPress → OnAnyButtonPressed.
+        public void OnAnyInput(InputValue value) { }
 
         void DeviceDetection(InputControl control)
         {
@@ -122,17 +133,23 @@ namespace MLTD.GenericSystem
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+        #endregion
 
-        #region Handler
+        #region Action Map Handlers
         public void SwitchActionMap(ActionMapType actionMap)
         {
+            //Check if the action map is already active
             if (currentActionMap == actionMap) return;
 
+            //Disable all intended action maps except UI
             OnActionMapAllDisabled?.Invoke(currentActionMap, previousActionMap);
+            playerInput.actions.FindActionMap("Disabled").Disable();
 
+            //Track Current and previous action map
             previousActionMap = currentActionMap;
             currentActionMap = actionMap;
 
+            //Activate the intended action map
             switch (actionMap)
             {
                 case ActionMapType.Player:
@@ -147,8 +164,25 @@ namespace MLTD.GenericSystem
                     ActivateActionMapUI();
                     break;
                 case ActionMapType.Disabled:
+                    playerInput.actions.FindActionMap("Disabled").Enable();
                     break;
             }
+
+            ChackAllActionMapState();
+        }
+
+        public void ChackAllActionMapState()
+        {
+            isPlayerActionMapEnabled = IsActionMapEnabledInAsset("Player");
+            isSequenceActionMapEnabled = IsActionMapEnabledInAsset("Sequence");
+            isUIActionMapEnabled = IsActionMapEnabledInAsset("UI");
+            isDisabledActionMapEnabled = IsActionMapEnabledInAsset("DIsabled");
+        }
+
+        bool IsActionMapEnabledInAsset(string mapName)
+        {
+            InputActionMap map = playerInput.actions.FindActionMap(mapName);
+            return map != null && map.enabled;
         }
 
         public void BacktoPreviousActionMap()
@@ -160,13 +194,11 @@ namespace MLTD.GenericSystem
             SwitchActionMap(mapBeforeSwitch);
         }
 
-        #endregion
 
-    #region UI Action Map
 
         public void ActivateActionMapUI()
         {
-            InputActionMap actionMapUI = playerInput.actions.FindActionMap("Dialogue");
+            InputActionMap actionMapUI = playerInput.actions.FindActionMap("UI");
             actionMapUI.Enable();
 
             TabLeftAction = actionMapUI.FindAction("TabLeft");
@@ -177,7 +209,12 @@ namespace MLTD.GenericSystem
 
             TabLeftAction.performed += OnTabLeftPerformed;
             TabRightAction.performed += OnTaRightPerformed;
+
+            ChackAllActionMapState();
         }
+
+        
+        #endregion
 
         void OnTabLeftPerformed(InputAction.CallbackContext ctx)
         {
@@ -187,7 +224,7 @@ namespace MLTD.GenericSystem
         {
         }
 
-    #endregion
+        
 
         public float holdRepeatDelay = 0.5f;
         public float holdRepeatRate = 0.1f;

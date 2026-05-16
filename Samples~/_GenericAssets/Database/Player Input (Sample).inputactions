@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "Player Input",
+    "name": "Player Input (Sample)",
     "maps": [
         {
             "name": "DIsabled",
@@ -1183,34 +1183,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Debugger",
-            "id": "d0060019-5064-4c36-a277-ce054b7a057f",
-            "actions": [
-                {
-                    "name": "ResetLevel",
-                    "type": "Button",
-                    "id": "339623bc-0e85-4241-a1ba-b80e3ecf7ccc",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "45a61894-2cd7-4b15-a09f-acefdc9970cf",
-                    "path": "<Keyboard>/f8",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ResetLevel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
