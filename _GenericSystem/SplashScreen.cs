@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace MLTD.GenericSystem
 {
-    public class SplashScreen : MonoBehaviour
+    public class SplashScreen : SceneEssentials
     {
         [SerializeField] bool isSamples = false;
         [SerializeField] string TitleScreenScene = "TitleScreen";
@@ -19,10 +19,11 @@ namespace MLTD.GenericSystem
             splashScreenCanvas.gameObject.SetActive(false);
         }
 
-        public void InitSplashScreen()
+        protected override void OnSceneInit()
         {
             splashScreenCanvas.gameObject.SetActive(true);
             animator.SetTrigger("PlaySplashScreen");
+            base.OnSceneInit();
         }
 
         //Called from the Animation Event

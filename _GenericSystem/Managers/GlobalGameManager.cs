@@ -18,6 +18,7 @@ namespace MLTD.GenericSystem
             "singleton managers and persists across scenes via DontDestroyOnLoad.";
 
         [Header("Game States (ReadOnly)")]
+        [SerializeField] SceneEssentials currentSceneEssentials;
         [SerializeField] private GameStates currentGameState;
         public GameStates CurrentGameState => currentGameState;
 
@@ -274,8 +275,9 @@ namespace MLTD.GenericSystem
          //After Scene is Loaded, check the Scene State
         public void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            var sceneEssentials = FindAnyObjectByType<SceneEssentials>();
-            SceneType currentSceneType = sceneEssentials != null ? sceneEssentials.sceneType : SceneType.Unknown;
+            currentSceneEssentials = FindAnyObjectByType<SceneEssentials>();
+
+            SceneType currentSceneType = currentSceneEssentials != null ? currentSceneEssentials.sceneType : SceneType.Unknown;
 
             //Switch behaviour depends on the Scene Type
             switch (currentSceneType)
@@ -301,7 +303,8 @@ namespace MLTD.GenericSystem
                     break;
             }
 
-            sceneEssentials.InitScene();
+            if (currentSceneEssentials != null)
+                currentSceneEssentials.InitSceneEssentials();
         }
 
         private IEnumerator LoadSceneRoutine(string sceneName, bool useLoadingScreen)

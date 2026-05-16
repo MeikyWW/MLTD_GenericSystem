@@ -74,7 +74,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -517,13 +517,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffa04735312e254598879bf4dbf8210, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneType: 0
+  sceneInitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   isSamples: 0
   TitleScreenScene: TitleScreen
   TitleScreenSampleScene: TitleScreen (Samples)
   OnSplashScreenCompleted:
     m_PersistentCalls:
       m_Calls: []
-  splashScreenCanvas: {fileID: 0}
+  splashScreenCanvas: {fileID: 400425097724885448}
+  animator: {fileID: 8296923875824766399}
 --- !u!95 &8296923875824766399
 Animator:
   serializedVersion: 7

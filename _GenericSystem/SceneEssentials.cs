@@ -8,12 +8,17 @@ using UnityEngine.SceneManagement;
 
 namespace MLTD.GenericSystem
 {
-    public class SceneEssentials : MonoBehaviour
+    public abstract class SceneEssentials : MonoBehaviour
     {
+        [Header("Scene Essentials")]
         public SceneType sceneType = SceneType.Unknown;
         [SerializeField] UnityEvent sceneInitEvent;
+        public void InitSceneEssentials()
+        {
+            OnSceneInit();
+        }
 
-        public void InitScene()
+        protected virtual void OnSceneInit()
         {
 #if UNITY_EDITOR
             Scene currentScene = SceneManager.GetActiveScene();
