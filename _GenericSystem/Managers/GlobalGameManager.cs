@@ -48,6 +48,28 @@ namespace MLTD.GenericSystem
 
         public bool ManagersReady { get; private set; }
 
+        /// <summary>
+        /// Spawns the Global Game Manager prefab when none exists in the scene or as <see cref="Instance"/>.
+        /// Boot starts automatically from <see cref="Start"/> on the spawned instance.
+        /// </summary>
+        public static bool EnsureExists(GlobalGameManager prefab)
+        {
+            if (Instance != null)
+                return true;
+
+            if (FindAnyObjectByType<GlobalGameManager>() != null)
+                return true;
+
+            if (prefab == null)
+            {
+                Debug.LogError("GlobalGameManager.EnsureExists called with a null prefab.");
+                return false;
+            }
+
+            Instantiate(prefab);
+            return true;
+        }
+
         void Awake()
         {
             if (Instance == null)
