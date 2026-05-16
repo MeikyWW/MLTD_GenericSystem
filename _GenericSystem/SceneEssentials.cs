@@ -44,10 +44,10 @@ namespace MLTD.GenericSystem
 
         public void InitSceneEssentials()
         {
-            OnSceneInit();
+            OnSceneEssentialsInit();
         }
 
-        protected virtual void OnSceneInit()
+        protected virtual void OnSceneEssentialsInit()
         {
 #if UNITY_EDITOR
             Scene currentScene = SceneManager.GetActiveScene();

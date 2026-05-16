@@ -20,11 +20,11 @@ namespace MLTD.GenericSystem
             splashScreenCanvas.gameObject.SetActive(false);
         }
 
-        protected override void OnSceneInit()
+        protected override void OnSceneEssentialsInit()
         {
             splashScreenCanvas.gameObject.SetActive(true);
             animator.SetTrigger("PlaySplashScreen");
-            base.OnSceneInit();
+            base.OnSceneEssentialsInit();
         }
 
         //Called from the Animation Event

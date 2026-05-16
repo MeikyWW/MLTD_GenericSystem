@@ -7,5 +7,10 @@ namespace MLTD.GenericSystem
     {   
         [Header("Title Screen")]
         [SerializeField] UI_MenuManager titleScreen_MenuManager;
+
+        protected override void OnSceneEssentialsInit()
+        {
+            base.OnSceneEssentialsInit();
+        }
     }
 }
