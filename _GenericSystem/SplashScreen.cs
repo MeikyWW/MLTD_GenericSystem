@@ -6,6 +6,7 @@ namespace MLTD.GenericSystem
 {
     public class SplashScreen : SceneEssentials
     {
+        [Header("Splash Screen")]
         [SerializeField] bool isSamples = false;
         [SerializeField] string TitleScreenScene = "TitleScreen";
         [SerializeField] string TitleScreenSampleScene = "TitleScreen (Samples)";
