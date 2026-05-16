@@ -312,7 +312,7 @@ namespace MLTD.GenericSystem
                     SetGameState(GameStates.Title);
                     break;
 
-                case SceneType.Gameplay:
+                case SceneType.MainGameplay:
                     SetGameState(GameStates.MainGameplay);
                     break;
                 
@@ -453,7 +453,7 @@ namespace MLTD.GenericSystem
         Splash,
         Title,
         MainMenu,
-        Gameplay,
+        MainGameplay,
         Cutscene,
         Unknown
     }
