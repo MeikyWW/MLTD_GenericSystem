@@ -9,23 +9,18 @@ namespace MLTD.GenericSystem
     {
         public static InputManager Instance { get; private set; }
 
+#region Gameplay Input
+        [Header("Gameplay Input")]
         [SerializeField] PlayerInput playerInput;
         public PlayerInput PlayerInput => playerInput;
 
         IDisposable _anyButtonPressSubscription;
-
-#region GENERIC_INPUT (safe for package)
-        //UI
-        [HideInInspector] public InputAction TabLeftAction;
-        [HideInInspector] public InputAction TabRightAction;
-#endregion
 
         public ActionMapType currentActionMap;
         public ActionMapType previousActionMap;
 
         [Header("Action Map Enabled State (ReadOnly)")]
         [SerializeField] private bool isPlayerActionMapEnabled;
-        [SerializeField] private bool isMenuActionMapEnabled;
         [SerializeField] private bool isSequenceActionMapEnabled;
         [SerializeField] private bool isUIActionMapEnabled;
         [SerializeField] private bool isDisabledActionMapEnabled;
@@ -36,14 +31,22 @@ namespace MLTD.GenericSystem
         public event Action<ActionMapType, ActionMapType> OnActionMapAllDisabled;
         public event Action<ActionMapType, ActionMapType> OnActionMapPlayerEnabled;
         public event Action<ActionMapType, ActionMapType> OnActionMapSequenceEnabled;
+#endregion
+#region GENERIC_INPUT (safe for package)
+        //UI
+        [HideInInspector] public InputAction TabLeftAction;
+        [HideInInspector] public InputAction TabRightAction;
+#endregion
 
+#region Device Input
+        [Header("Device Input")]
         [SerializeField] private DeviceInputType currentDeviceInput;
         public DeviceInputType CurrentDeviceInput => currentDeviceInput;
 
         public static bool blockNavigationThisFrame = false;
 
         public event Action<DeviceInputType> OnDeviceChanged;
-
+#endregion
         void Awake()
         {
             if (Instance == null)

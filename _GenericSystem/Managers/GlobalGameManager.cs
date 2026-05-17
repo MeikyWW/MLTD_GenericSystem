@@ -39,10 +39,10 @@ namespace MLTD.GenericSystem
         private Dictionary<GameStates, Action> gameStateOnEnterHandlers;
 
         [Header("Managers")]
-        [SerializeField] public SystemSaveManager ssm;
+        [SerializeField] public SystemSaveManager SystemSaveManager;
         [SerializeField] public InputManager inputManager;
-        [SerializeField] public LocalizationManager lcm;
-        [SerializeField] public AudioManager aum;
+        [SerializeField] public LocalizationManager LocalizationManager;
+        [SerializeField] public AudioManager AudioManager;
         [SerializeField] public GlobalUIManager gl_uim;
         //[SerializeField] public DisplayManager dspm;
 
@@ -111,10 +111,10 @@ namespace MLTD.GenericSystem
                 AudioManager.Instance
             );
 
-            ssm = SystemSaveManager.Instance;
+            SystemSaveManager = SystemSaveManager.Instance;
             inputManager = InputManager.Instance;
-            lcm = LocalizationManager.Instance;
-            aum = AudioManager.Instance;
+            LocalizationManager = LocalizationManager.Instance;
+            AudioManager = AudioManager.Instance;
 
             ValidateManagers();
         }
@@ -122,18 +122,18 @@ namespace MLTD.GenericSystem
 
         void ValidateManagers()
         {
-            if (!ssm) Debug.LogError("SystemSaveManager missing");
+            if (!SystemSaveManager) Debug.LogError("SystemSaveManager missing");
             if (!inputManager) Debug.LogError("InputManager missing");
-            if (!aum) Debug.LogError("AudioManager missing");
-            if (!lcm) Debug.LogError("LocalizationManager missing");
+            if (!AudioManager) Debug.LogError("AudioManager missing");
+            if (!LocalizationManager) Debug.LogError("LocalizationManager missing");
             //if (!dspm) Debug.LogError("DisplayManager missing");
             //if (!gl_uim) Debug.LogError("GlobalUIManager missing");
 
             ManagersReady =
-                ssm  
+                SystemSaveManager  
                 && inputManager
-                && aum  
-                && lcm  
+                && AudioManager  
+                && LocalizationManager  
                 //&& dspm  
                 //&& gl_uim
                 ;
@@ -278,11 +278,13 @@ namespace MLTD.GenericSystem
         public void OnEnter_SplashState()
         {
             Debug.Log("Entering Splash State");
+            inputManager.SwitchActionMap(ActionMapType.Disabled);
         }
 
         public void OnEnter_TitleState() // Called when SplashScreen Logo are done Played
         {
             Debug.Log("Entering Title State");
+            inputManager.SwitchActionMap(ActionMapType.UI);
         }
         public void OnEnter_GameplayState()
         {

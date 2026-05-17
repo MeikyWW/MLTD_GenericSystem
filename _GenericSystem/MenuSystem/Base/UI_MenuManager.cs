@@ -37,8 +37,6 @@ namespace MLTD.GenericSystem
         private async void Awake()
         {
             await GetUsedManagers();
-
-            Init();
             
             menuStack.Push(defaultMenu);
             currentMenu = defaultMenu;
