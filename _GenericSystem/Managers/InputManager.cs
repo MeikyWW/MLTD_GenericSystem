@@ -179,7 +179,7 @@ namespace MLTD.GenericSystem
             isPlayerActionMapEnabled = IsActionMapEnabledInAsset("Player");
             isSequenceActionMapEnabled = IsActionMapEnabledInAsset("Sequence");
             isUIActionMapEnabled = IsActionMapEnabledInAsset("UI");
-            isDisabledActionMapEnabled = IsActionMapEnabledInAsset("DIsabled");
+            isDisabledActionMapEnabled = IsActionMapEnabledInAsset("Disabled");
         }
 
         bool IsActionMapEnabledInAsset(string mapName)
