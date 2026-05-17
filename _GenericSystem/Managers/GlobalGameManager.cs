@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MLTD.GenericSystem
 {
@@ -43,15 +44,71 @@ namespace MLTD.GenericSystem
         [SerializeField] public InputManager inputManager;
         [SerializeField] public LocalizationManager LocalizationManager;
         [SerializeField] public AudioManager AudioManager;
-        [SerializeField] public GlobalUIManager gl_uim;
-        //[SerializeField] public DisplayManager dspm;
+        [SerializeField] public GlobalUIManager globalUI;
+        [SerializeField] bool managersReady;
+        public bool ManagersReady => managersReady;
+        
+        [Header("Boot Settings")]
+        [SerializeField] Slider bootProgressBar;
+        [SerializeField] public bool bootCompleted = false;
+        [SerializeField] Canvas canvasBoot;
 
-        public bool ManagersReady { get; private set; }
+        [Header("Framerate Settings")]
+        [SerializeField] private int targetFPS = 60;
+        [SerializeField] private bool limitFPS = true;
+        [SerializeField] private bool disableVSync = true;
+        [SerializeField] private bool useFPSCounter = false;
+        [SerializeField] private GameObject canvasFPSCounter;
+        [SerializeField] private TMP_Text fpsText;
+        private float deltaTime;
 
-        /// <summary>
-        /// Spawns the Global Game Manager prefab when none exists in the scene or as <see cref="Instance"/>.
-        /// Boot starts automatically from <see cref="Start"/> on the spawned instance.
-        /// </summary>
+        [Header("Slow Motion")]
+        [SerializeField] private bool useSlowMotion = false;
+        [SerializeField, Range(0.05f, 1f)] private float slowMotionMultiplier = 0.5f;
+
+        void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this; // Assign the instance
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject); // Prevent duplicate GameManagers
+                return;
+            }
+
+            InitGameStates();
+            
+            ApplyVSyncSetting();
+            ApplyFPSLimit();
+            ApplySlowMotion();
+        }
+
+        void Start()
+        {
+            StartCoroutine(InitManagersRoutine());
+
+            if(!bootCompleted)
+                StartCoroutine(BootFlow());
+            
+            // Initialize loading screen state tracking
+            UpdateLoadingScreenState();
+
+            //FPS Settings
+            if(useFPSCounter && canvasFPSCounter != null)
+                canvasFPSCounter.SetActive(true);
+            else if(!useFPSCounter && canvasFPSCounter != null)
+                canvasFPSCounter.SetActive(false);
+        }
+
+        void Update()
+        {
+            if(useFPSCounter && fpsText != null)
+                UpdateFPSCounter();
+        }
+
         public static bool EnsureExists(GlobalGameManager prefab)
         {
             if (Instance != null)
@@ -68,37 +125,6 @@ namespace MLTD.GenericSystem
 
             Instantiate(prefab);
             return true;
-        }
-
-        void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this; // Assign the instance
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject); // Prevent duplicate GameManagers\
-                return;
-            }
-
-            InitGameStates();
-
-            // Should be called only once Per Lifetime of the game. 
-            // Ideally When SplashScreen because is the only scene 
-            // that Wasn't going to be visited anymore. 
-        }
-
-        void Start()
-        {
-            StartCoroutine(InitManagersRoutine());
-
-            if(!bootCompleted)
-                StartCoroutine(BootFlow());
-            
-            // Initialize loading screen state tracking
-            UpdateLoadingScreenState();
         }
         
         IEnumerator InitManagersRoutine()
@@ -129,7 +155,7 @@ namespace MLTD.GenericSystem
             //if (!dspm) Debug.LogError("DisplayManager missing");
             //if (!gl_uim) Debug.LogError("GlobalUIManager missing");
 
-            ManagersReady =
+            managersReady =
                 SystemSaveManager  
                 && inputManager
                 && AudioManager  
@@ -141,13 +167,6 @@ namespace MLTD.GenericSystem
     
     #region Boot
 
-        [SerializeField] float progress;
-        
-        [SerializeField] Slider progressBar;
-        [SerializeField] public bool bootCompleted = false;
-        [SerializeField] Canvas canvasBoot;
-
-    
         IEnumerator BootFlow()
         {
             if (!canvasBoot.gameObject.activeSelf)
@@ -159,7 +178,7 @@ namespace MLTD.GenericSystem
             // Later:
             // yield return InitAddressables(0.5f, 1f);
 
-            SetProgress(1f);
+            SetBootProgress(1f);
 
             // 🔹 HOLD at full
             yield return new WaitForSeconds(1f); // 0.5–1 sec feels good
@@ -185,12 +204,12 @@ namespace MLTD.GenericSystem
                 timer += Time.deltaTime;
 
                 float t = Mathf.Clamp01(timer / minDuration);
-                SetProgress(Mathf.Lerp(start, end, t));
+                SetBootProgress(Mathf.Lerp(start, end, t));
 
                 yield return null;
             }
 
-            SetProgress(end);
+            SetBootProgress(end);
             Debug.Log("All Managers are loaded");
         }
 
@@ -205,12 +224,12 @@ namespace MLTD.GenericSystem
                 timer += Time.deltaTime;
 
                 float t = Mathf.Clamp01(timer / minDuration);
-                SetProgress(Mathf.Lerp(start, end, t));
+                SetBootProgress(Mathf.Lerp(start, end, t));
 
                 yield return null;
             }
 
-            SetProgress(end);
+            SetBootProgress(end);
             Debug.Log("Save Data is loaded");
         }
 
@@ -228,9 +247,9 @@ namespace MLTD.GenericSystem
         //     SetProgress(end);
         // }
 
-        public void SetProgress(float value)
+        public void SetBootProgress(float value)
         {
-            progressBar.value = value;
+            bootProgressBar.value = value;
         }
 
 #endregion
@@ -433,6 +452,89 @@ namespace MLTD.GenericSystem
         {
             newGameEvent.Invoke();
         }
+
+#region Framerate Settings
+
+// ----------------------------
+    // FPS CALCULATION
+    // ----------------------------
+    private void UpdateFPSCounter()
+    {
+        deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
+        float fps = 1.0f / deltaTime;
+
+        fpsText.text = $"FPS: {Mathf.RoundToInt(fps)}";
+    }
+
+    // ----------------------------
+    // APPLY SETTINGS
+    // ----------------------------
+    public void ApplyFPSLimit()
+    {
+        if (limitFPS)
+        {
+            Application.targetFrameRate = targetFPS;
+        }
+        else
+        {
+            Application.targetFrameRate = -1; // Unlimited
+        }
+    }
+
+    public void ApplyVSyncSetting()
+    {
+        QualitySettings.vSyncCount = disableVSync ? 0 : 1;
+    }
+
+    public void ApplySlowMotion()
+    {
+        if (useSlowMotion)
+        {
+            Time.timeScale = slowMotionMultiplier;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = 0.02f;
+        }
+    }
+
+    // ----------------------------
+    // RUNTIME MENU SUPPORT
+    // ----------------------------
+    
+    public void SetTargetFPS(int fps)
+    {
+        targetFPS = fps;
+        ApplyFPSLimit();
+    }
+
+    public void SetVSync(bool enabled)
+    {
+        disableVSync = !enabled;
+        ApplyVSyncSetting();
+    }
+
+    public void SetSlowMotion(bool enabled)
+    {
+        useSlowMotion = enabled;
+        ApplySlowMotion();
+    }
+
+    public void SetFPSLimit(bool enabled)
+    {
+        limitFPS = enabled;
+        ApplyFPSLimit();
+    }
+    public void ToggleFPSCounter()
+    {
+        useFPSCounter = enabled;
+        if(canvasFPSCounter != null)
+            canvasFPSCounter.SetActive(enabled);
+    }
+
+#endregion
 
 
     }
