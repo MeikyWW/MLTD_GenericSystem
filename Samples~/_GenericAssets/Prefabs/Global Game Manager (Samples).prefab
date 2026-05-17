@@ -580,6 +580,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MLTD.GenericSystem::MLTD.GenericSystem.InputManager
   playerInput: {fileID: 3853693645017849409}
+  currentActionMap: 0
+  previousActionMap: 0
+  isPlayerActionMapEnabled: 0
+  isSequenceActionMapEnabled: 0
+  isUIActionMapEnabled: 0
+  isDisabledActionMapEnabled: 0
+  currentSelectedGO: {fileID: 0}
   TabLeftAction:
     m_Name: 
     m_Type: 0
@@ -598,9 +605,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  currentActionMap: 0
-  previousActionMap: 0
-  currentSelectedGO: {fileID: 0}
   currentDeviceInput: 0
   holdRepeatDelay: 0.5
   holdRepeatRate: 0.1
@@ -943,15 +947,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: This is the Global Game Manager. Its Gameobject contains allsingleton
     managers and persists across scenes via DontDestroyOnLoad.
+  currentSceneEssentials: {fileID: 0}
   currentGameState: 0
   previousGameState: 0
   previousScene: 
   currentScene: 
   isLoadingScreenProgressing: 0
-  ssm: {fileID: 0}
+  SystemSaveManager: {fileID: 0}
   inputManager: {fileID: 0}
-  lcm: {fileID: 0}
-  aum: {fileID: 0}
+  LocalizationManager: {fileID: 0}
+  AudioManager: {fileID: 0}
   gl_uim: {fileID: 0}
   progress: 0
   progressBar: {fileID: 9091198278279851912}
@@ -1425,72 +1430,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8001377582059377195}
     m_Modifications:
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_MoveAction
-      value: 
-      objectReference: {fileID: -6425683410646002870, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_PointAction
-      value: 
-      objectReference: {fileID: 3567870301116382808, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_ActionsAsset
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_CancelAction
-      value: 
-      objectReference: {fileID: -8117075468905827943, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_SubmitAction
-      value: 
-      objectReference: {fileID: 1853775028463613826, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_LeftClickAction
-      value: 
-      objectReference: {fileID: 8260260864162570977, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_RightClickAction
-      value: 
-      objectReference: {fileID: 6588436831639396018, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_MiddleClickAction
-      value: 
-      objectReference: {fileID: 241022965352478140, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_ScrollWheelAction
-      value: 
-      objectReference: {fileID: 3544485802684312583, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_TrackedDevicePositionAction
-      value: 
-      objectReference: {fileID: -8328163430953517495, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
-    - target: {fileID: 1310258506319622397, guid: 8139248fd36c15245b204d3bd194ef33,
-        type: 3}
-      propertyPath: m_TrackedDeviceOrientationAction
-      value: 
-      objectReference: {fileID: 7067748485790915950, guid: 24d7eaa00562c554e9c0873de0a3fcf8,
-        type: 3}
     - target: {fileID: 1546087428024835016, guid: 8139248fd36c15245b204d3bd194ef33,
         type: 3}
       propertyPath: m_LocalPosition.x

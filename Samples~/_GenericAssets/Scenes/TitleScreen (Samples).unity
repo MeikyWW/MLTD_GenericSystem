@@ -286,6 +286,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneType: 1
+  sceneInitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  globalGameManagerPrefab: {fileID: 6805956920214626462, guid: 0f0d2b8a6687a9743a9bacf29bcc6ccc,
+    type: 3}
 --- !u!4 &1566045262
 Transform:
   m_ObjectHideFlags: 0
